@@ -1,0 +1,47 @@
+{
+   "name": "form",
+   "description": "Front-end assets for the chat application",
+   "private": true,
+   "version": "0.0.0",
+   "type": "module",
+   "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "preview": "vite preview"
+   },
+   "devDependencies": {
+      "vite": "^5.4.11",
+      "@lo-fi/local-vault": "^0.16.1",
+      "@lo-fi/webauthn-local-client": "^0.1000.2",
+      "@noble/secp256k1": "^2.1.0",
+      "@rollup/plugin-inject": "^5.0.5",
+      "blowfish-js": "^1.0.0",
+      "buffer": "^6.0.3",
+      "jssha": "^3.3.1",
+
+      "postcss": "latest",
+      "postcss-combine-duplicated-selectors": "latest",
+      "postcss-combine-media-query": "latest",
+      "postcss-hover-media-feature": "latest",
+      "@fullhuman/postcss-purgecss": "latest",
+      "prettier": "latest",
+      "prettier-plugin-tailwindcss": "latest",
+      "tailwindcss": "latest",
+      "cssnano": "latest",
+      "sass": "1.75.0"
+   },
+   "dependencies": {
+      "i18n-js": "^4.5.0",
+      "intl-tel-input": "^24.8.1",
+      "dayjs": "^1.11.13",
+      "@popperjs/core": "^2.11.8",
+      "@googlemaps/js-api-loader": "^1.16.8",
+      "choices.js": "^11.0.2"
+   },
+   "pnpm": {
+      "overrides": {
+         "consola": "3.2.3"
+      }
+   },
+   "packageManager": "pnpm@9.12.3"
+}

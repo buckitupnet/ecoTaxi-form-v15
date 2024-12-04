@@ -1,0 +1,8 @@
+export const CONFIG = {
+   BASE_URL: "https://eco-taxi.one",
+   BOARD: 3934194107,
+   ADMIN_KEY: "028f6245d765045c4a8cfe3b44d5e3b4d3dc1d969e4d4d19220b56ac3f77ce19bf",
+   GOOGLE_KEY: "AIzaSyCEK8GBdRCoA6OQeOiFilBgShzwU0t8D84",
+   MAIN_KEY:
+      "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjIzNjE2NzQ4MCwidWlkIjozODY2OTA2NCwiaWFkIjoiMjAyMy0wMi0xMFQxMjoxNjowOS43NzRaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MTA1OTI2MTUsInJnbiI6InVzZTEifQ.oNz6k1Glu1YMbLwRHwYnVsQiOBcsMgzTWDwDJJgkSLY",
+};

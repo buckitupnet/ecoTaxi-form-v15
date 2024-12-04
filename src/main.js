@@ -3,6 +3,8 @@ import "./index.scss";
 import Choices from "choices.js";
 import intlTelInput from "intl-tel-input";
 
+import { CONFIG } from "../config";
+
 import { DateHandler } from "./modules/DateMoment";
 import { TbilisiMap } from "./modules/TbilisiMap";
 import { Translator } from "./modules/Translator";
@@ -14,20 +16,13 @@ import { FormAutoFiller } from "./modules/FormAutoFill";
 import { Authorization } from "./modules/Authorization";
 import { Chat } from "./modules/Chat";
 
-const BOARD = 3934194107;
-const BASE_URL = "https://eco-taxi.one";
-const ADMIN_KEY = "028f6245d765045c4a8cfe3b44d5e3b4d3dc1d969e4d4d19220b56ac3f77ce19bf";
-const GOOGLE_KEY = "AIzaSyCEK8GBdRCoA6OQeOiFilBgShzwU0t8D84";
-const KEY =
-   "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjIzNjE2NzQ4MCwidWlkIjozODY2OTA2NCwiaWFkIjoiMjAyMy0wMi0xMFQxMjoxNjowOS43NzRaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MTA1OTI2MTUsInJnbiI6InVzZTEifQ.oNz6k1Glu1YMbLwRHwYnVsQiOBcsMgzTWDwDJJgkSLY";
-
 const instansEncryptionManager = new EncryptionManager();
 const translator = new Translator();
 new Authorization(instansEncryptionManager);
-new EcoTaxiFormHandler(BASE_URL, BOARD, KEY, ADMIN_KEY, instansEncryptionManager);
+new EcoTaxiFormHandler(CONFIG.BASE_URL, CONFIG.BOARD, CONFIG.MAIN_KEY, CONFIG.ADMIN_KEY, instansEncryptionManager);
 new DateHandler(["check-1", "check-2", "check-3", "check-4"], translator.i18n.locale);
-new TbilisiMap(GOOGLE_KEY);
-new Chat(BASE_URL, ADMIN_KEY, instansEncryptionManager);
+new TbilisiMap(CONFIG.GOOGLE_KEY);
+new Chat(CONFIG.BASE_URL, CONFIG.ADMIN_KEY, instansEncryptionManager);
 new CheckboxFormHandler();
 
 const languageSelect = new Choices("#languageSelect", {
@@ -106,7 +101,7 @@ const paymentSelect = new Choices("#paymentSelect", {
 
 new TariffSelector("areaSelect", tariffSelect);
 new FormAutoFiller(
-   BASE_URL,
+   CONFIG.BASE_URL,
    { area: areaSelect, language: langSelect, tariff: tariffSelect, payment: paymentSelect },
    instansEncryptionManager,
 );

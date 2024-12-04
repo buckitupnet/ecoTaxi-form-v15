@@ -31,7 +31,7 @@
                   <polyline points="16 17 21 12 16 7" />
                   <line x1="21" x2="9" y1="12" y2="12" />
                </svg>
-               Login
+               <span data-lang="button.login"> Login</span>
             </button>
             <button
                id="popupButtonLogout"
@@ -52,7 +52,7 @@
                   <polyline points="16 17 21 12 16 7" />
                   <line x1="21" x2="9" y1="12" y2="12" />
                </svg>
-               Logout
+               <span data-lang="button.logout"> Logout</span>
             </button>
          </div>
          <form id="form" class="grid">
@@ -480,14 +480,22 @@
       <div id="modalAuth" class="relative z-10 hidden" aria-labelledby="logoutModalTitle" role="dialog" aria-modal="true">
          <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
          <div id="modalContent" class="modalContent fixed inset-0 z-10 flex w-screen justify-center overflow-y-auto">
+            <!-- Log In -->
             <div id="contentLogin" class="my-auto hidden items-center justify-center p-4 text-center sm:items-center sm:p-0">
                <div
                   class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
                   <div class="mb-5 bg-white">
                      <div class="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3 class="text-center text-lg font-semibold text-gray-900" id="logoutModalTitle">Log In</h3>
+                        <h3
+                           class="text-center text-lg font-semibold text-gray-900"
+                           id="logoutModalTitle"
+                           data-lang="modals.modalAuth.title">
+                           Log In
+                        </h3>
                         <div class="mt-2">
-                           <p class="text-center text-gray-500">Please, enter your name. That’s how other users will see you</p>
+                           <p class="text-center text-gray-500" data-lang="modals.modalAuth.message">
+                              Please, enter your name. That’s how other users will see you
+                           </p>
                         </div>
                      </div>
                   </div>
@@ -495,7 +503,8 @@
                      <button
                         id="importKeysButton"
                         class="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-                        Import the recovery keys
+                        <span data-lang="modals.modalAuth.buttons.importKeys"> Import the recovery keys</span>
+
                         <svg
                            xmlns="http://www.w3.org/2000/svg"
                            width="16"
@@ -513,22 +522,30 @@
                         </svg>
                      </button>
                      <button
-                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500">
+                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
+                        data-lang="modals.modalAuth.buttons.close">
                         Close
                      </button>
                   </div>
                </div>
             </div>
+
+            <!-- Import Keys -->
             <div id="contentLoginPassword" class="my-auto hidden items-center justify-center p-4 text-center sm:items-center sm:p-0">
                <div
                   class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
                   <div class="mb-5 bg-white">
                      <div class="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3 class="text-center text-lg font-semibold text-gray-900" id="passwordModalTitle">
+                        <h3
+                           class="text-center text-lg font-semibold text-gray-900"
+                           id="passwordModalTitle"
+                           data-lang="modals.contentLoginPassword.title">
                            Import the recovery keys
                         </h3>
                         <div class="mt-2">
-                           <p class="text-center text-gray-500">Please, upload the key file and enter the password for decryption</p>
+                           <p class="text-center text-gray-500" data-lang="modals.contentLoginPassword.message">
+                              Please, upload the key file and enter the password for decryption
+                           </p>
                         </div>
                      </div>
                   </div>
@@ -538,29 +555,40 @@
                         class="h-12 w-full rounded-lg border border-black/10 px-3 placeholder-black/50 focus:border-black/50 focus:outline-none focus:ring-0"
                         placeholder="Enter Password"
                         minlength="12"
-                        type="password" />
-                     <p class="mb-2 text-sm text-black/50">At least 12 symbols</p>
+                        type="password"
+                        data-lang="modals.contentLoginPassword.inputPlaceholder" />
+                     <p class="mb-2 text-sm text-black/50" data-lang="modals.contentLoginPassword.passwordHint">At least 12 symbols</p>
                      <label
                         id="confirmImportButton"
                         class="flex h-12 w-full cursor-not-allowed items-center justify-center rounded-lg border-0 bg-blue-600 text-white opacity-50">
                         <input disabled class="hidden" type="file" />
-                        Upload Key File
+                        <span data-lang="modals.contentLoginPassword.buttons.uploadKeyFile"> Upload Key File</span>
                      </label>
                      <button
-                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500">
+                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
+                        data-lang="modals.contentLoginPassword.buttons.close">
                         Close
                      </button>
                   </div>
                </div>
             </div>
+
+            <!-- Log Out -->
             <div id="contentLogout" class="my-auto hidden items-center justify-center p-4 text-center sm:items-center sm:p-0">
                <div
                   class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
                   <div class="mb-5 bg-white">
                      <div class="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3 class="text-center text-lg font-semibold text-gray-900" id="logoutModalTitle">Log Out & Back Up</h3>
+                        <h3
+                           class="text-center text-lg font-semibold text-gray-900"
+                           id="logoutModalTitle"
+                           data-lang="modals.contentLogout.title">
+                           Log Out & Back Up
+                        </h3>
                         <div class="mt-2">
-                           <p class="text-center text-gray-500">To get access again, you will need the recovery keys:</p>
+                           <p class="text-center text-gray-500" data-lang="modals.contentLogout.message">
+                              To get access again, you will need the recovery keys:
+                           </p>
                         </div>
                      </div>
                   </div>
@@ -568,7 +596,8 @@
                      <button
                         id="downloadKeysButton"
                         class="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-                        Download the Keys
+                        <span data-lang="modals.contentLogout.buttons.downloadKeys">Download the Keys</span>
+
                         <svg
                            xmlns="http://www.w3.org/2000/svg"
                            width="16"
@@ -588,7 +617,8 @@
                      <button
                         id="logoutWithoutKeysButton"
                         class="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-blue-600 bg-transparent px-3 py-2 text-sm font-semibold shadow-sm hover:border-blue-500 hover:bg-blue-500 hover:text-white">
-                        Log Out without the Keys
+                        <span data-lang="modals.contentLogout.buttons.logoutWithoutKeys">Log Out without the Keys</span>
+
                         <svg
                            xmlns="http://www.w3.org/2000/svg"
                            width="16"
@@ -606,40 +636,30 @@
                         </svg>
                      </button>
                      <button
-                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500">
+                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
+                        data-lang="modals.contentLogout.buttons.close">
                         Close
                      </button>
                   </div>
                </div>
             </div>
+
+            <!-- Set Up Password -->
             <div id="contentLogoutPassword" class="my-auto hidden items-center justify-center p-4 text-center sm:items-center sm:p-0">
                <div
                   class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
                   <div class="mb-5 bg-white">
                      <div class="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3 class="text-center text-lg font-semibold text-gray-900" id="passwordModalTitle">Set Up Password</h3>
+                        <h3
+                           class="text-center text-lg font-semibold text-gray-900"
+                           id="passwordModalTitle"
+                           data-lang="modals.contentLogoutPassword.title">
+                           Set Up Password
+                        </h3>
                         <div class="mt-2">
-                           <p class="text-center text-gray-500">
-                              To store the backup copy of the key securely, enter the encryption password for the file
+                           <p class="text-center text-gray-500" data-lang="modals.contentLogoutPassword.message">
+                              To store the backup copy of the key securely, set up a password
                            </p>
-                           <div class="mt-5 flex h-7 w-full items-center gap-2 rounded-lg border-0 bg-black/10 px-2">
-                              <svg
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 width="16"
-                                 height="16"
-                                 viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 class="lucide lucide-info">
-                                 <circle cx="12" cy="12" r="10" />
-                                 <path d="M12 16v-4" />
-                                 <path d="M12 8h.01" />
-                              </svg>
-                              <p class="text-left text-xs text-black/50">This password is not stored and cannot be recovered</p>
-                           </div>
                         </div>
                      </div>
                   </div>
@@ -649,17 +669,35 @@
                         class="h-12 w-full rounded-lg border border-black/10 px-3 placeholder-black/50 focus:border-black/50 focus:outline-none focus:ring-0"
                         placeholder="Enter Password"
                         minlength="12"
-                        type="password" />
-                     <p class="mb-2 text-sm text-black/50">At least 12 symbols</p>
+                        type="password"
+                        data-lang="modals.contentLogoutPassword.inputPlaceholder" />
+                     <p class="mb-2 text-sm text-black/50" data-lang="modals.contentLogoutPassword.passwordHint">
+                        At least 12 symbols
+                     </p>
                      <button
-                        id="confirmDownloadButton"
-                        class="h-12 w-full rounded-lg border-0 bg-blue-600 text-white disabled:cursor-not-allowed disabled:opacity-50"
-                        disabled
-                        type="submit">
-                        Download
+                        id="downloadKeysPasswordButton"
+                        class="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
+                        <span data-lang="modals.contentLogoutPassword.buttons.downloadKeys">Download the Keys</span>
+
+                        <svg
+                           xmlns="http://www.w3.org/2000/svg"
+                           width="16"
+                           height="16"
+                           viewBox="0 0 24 24"
+                           fill="none"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                           class="lucide lucide-download">
+                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                           <polyline points="7 10 12 15 17 10" />
+                           <line x1="12" x2="12" y1="15" y2="3" />
+                        </svg>
                      </button>
                      <button
-                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500">
+                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
+                        data-lang="modals.contentLogoutPassword.buttons.close">
                         Close
                      </button>
                   </div>
@@ -667,10 +705,10 @@
             </div>
          </div>
       </div>
-      <div class="fixed bottom-4 right-4">
+      <div class="fixed bottom-5 right-5">
          <a class="flex items-center" href="https://wa.me/995579083616" target="_blank">
-            <p class="mr-2 text-lg font-semibold text-[#25d366]">Ask a question</p>
-            <img class="w-10 rounded-full bg-[#25d366] p-2 lg:w-14" src="/img/whatsapp.png" alt="whatsapp" />
+            <!-- <p class="mr-2 text-lg font-semibold text-[#25d366]">Ask a question</p> -->
+            <img class="w-12 rounded-full bg-[#25d366] p-2 lg:w-14" src="/img/whatsapp.png" alt="whatsapp" />
          </a>
       </div>
       <script src="https://www.google.com/recaptcha/api.js"></script>

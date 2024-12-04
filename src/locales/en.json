@@ -85,6 +85,10 @@
          "transfer": "Transfer to account",
          "invoice": "Invoice"
       },
+      "button": {
+         "login": "Login",
+         "logout": "Logout"
+      },
       "languageSelect": "Select a language",
       "areaSelect": {
          "placeholder": "Select an area",
@@ -93,5 +97,45 @@
       "langSelect": "Select languages",
       "tariffSelect": "Select a tariff",
       "paymentSelect": "Select a payment method"
+   },
+   "modals": {
+      "modalAuth": {
+         "title": "Log In",
+         "message": "Please, enter your name. That’s how other users will see you",
+         "buttons": {
+            "importKeys": "Import the recovery keys",
+            "close": "Close"
+         }
+      },
+      "contentLoginPassword": {
+         "title": "Import the recovery keys",
+         "message": "Please, upload the key file and enter the password for decryption",
+         "inputPlaceholder": "Enter Password",
+         "passwordHint": "At least 12 symbols",
+         "buttons": {
+            "uploadKeyFile": "Upload Key File",
+            "close": "Close"
+         }
+      },
+      "contentLogout": {
+         "title": "Log Out & Back Up",
+         "message": "To get access again, you will need the recovery keys:",
+         "buttons": {
+            "downloadKeys": "Download the Keys",
+            "logoutWithoutKeys": "Log Out without the Keys",
+            "close": "Close"
+         }
+      },
+      "contentLogoutPassword": {
+         "title": "Set Up Password",
+         "message": "To store the backup copy of the key securely, enter the encryption password for the file",
+         "note": "This password is not stored and cannot be recovered",
+         "inputPlaceholder": "Enter Password",
+         "passwordHint": "At least 12 symbols",
+         "buttons": {
+            "download": "Download",
+            "close": "Close"
+         }
+      }
    }
 }

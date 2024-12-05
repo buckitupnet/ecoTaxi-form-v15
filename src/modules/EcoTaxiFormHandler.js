@@ -26,8 +26,32 @@ export class EcoTaxiFormHandler {
       const dates = this.collectCheckedDates(formData);
       const data = this.extractFormData(formData);
 
-      if (!this.validateRecaptcha()) return;
+      if (data.read !== "on") {
+         this.showErrorMessage("Please accept the sorting guidelines.");
+         return;
+      }
+
+      if (!this.validateRecaptcha()) {
+         this.showErrorMessage("Please complete the recaptcha.");
+         return;
+      }
+
       this.sendData(data, dates);
+   }
+
+   showErrorMessage(message) {
+      const errorElement = document.getElementById("error");
+      errorElement.innerText = message;
+      errorElement?.classList.remove("hidden");
+
+      setTimeout(() => {
+         errorElement?.classList.add("hidden");
+      }, 2000);
+   }
+
+   validateRecaptcha() {
+      const recaptchaResponse = grecaptcha.getResponse();
+      return recaptchaResponse.length ? true : false;
    }
 
    collectCheckedDates(formData) {
@@ -49,15 +73,6 @@ export class EcoTaxiFormHandler {
          }
       });
       return data;
-   }
-
-   validateRecaptcha() {
-      const recaptchaResponse = grecaptcha.getResponse();
-      if (!recaptchaResponse.length) {
-         console.error("Пожалуйста, пройдите проверку капчи.");
-         return false;
-      }
-      return true;
    }
 
    openModal() {

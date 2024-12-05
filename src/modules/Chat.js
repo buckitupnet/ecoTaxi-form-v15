@@ -125,12 +125,26 @@ export class Chat {
             const text = this.#formatText(msg.content.text);
             const date = new Date(msg.timestamp * 1000).toLocaleString();
 
+            // Условие для проверки автора
+            const isEcoTaxi = msg.author.name === "EcoTaxi";
+
+            const wrapClass = isEcoTaxi ? "ml-auto w-fit text-right" : "w-fit";
+
+            // Выбор класса стилей в зависимости от автора
+            const containerClass = isEcoTaxi
+               ? "max-w-72 rounded-xl bg-blue-200 px-3 py-2"
+               : "max-w-72 rounded-xl bg-[#98BFA6] px-3 py-2";
+
+            const textClass = isEcoTaxi ? "mb-3 font-bold text-blue-600" : "mb-3 font-bold";
+
             return `
-               <div class="max-w-72 rounded-xl bg-[#98BFA6] px-3 py-2">
-                  <p class="my-4 font-bold">
-                     <i>${msg.author.name}</i>
-                  </p>
-                  <p class='break-words'>${text}</p>
+              <div class="${wrapClass}">
+                 <div class="${containerClass}">
+                    <p class="${textClass}">
+                       <i>${msg.author.name}</i>
+                    </p>
+                    <p class='break-words'>${text}</p>
+                 </div>
                   <span class="text-sm text-[#6c757d]">${date}</span>
                </div>`;
          })

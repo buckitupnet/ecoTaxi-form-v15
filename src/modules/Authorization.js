@@ -1,9 +1,112 @@
 import { Enigma } from "./Enigma";
 
-export class Authorization {
-   constructor(encryptionManager) {
+export class ModalManager {
+   constructor() {
+      this.body = document.querySelector("body");
+      this.modalAuth = document.getElementById("modalAuth");
+
+      this.contentLogin = document.getElementById("contentLogin");
+      this.contentLogout = document.getElementById("contentLogout");
+      this.contentLoginPassword = document.getElementById("contentLoginPassword");
+      this.contentLogoutPassword = document.getElementById("contentLogoutPassword");
+   }
+
+   openModal() {
+      this.modalAuth?.classList.remove("hidden");
+      this.body?.classList.add("overflow-hidden");
+   }
+
+   closeModal() {
+      this.modalAuth?.classList.add("hidden");
+      this.body?.classList.remove("overflow-hidden");
+      this.closeModalContentLogin();
+      this.closeModalContentLogout();
+      this.closeContentLoginPassword();
+      this.closeContentLogoutPassword();
+   }
+
+   openModalContentLogin() {
+      this.contentLogin?.classList.remove("hidden");
+   }
+
+   openModalContentLogout() {
+      this.contentLogout?.classList.remove("hidden");
+   }
+
+   closeModalContentLogin() {
+      this.contentLogin?.classList.add("hidden");
+   }
+
+   closeModalContentLogout() {
+      this.contentLogout?.classList.add("hidden");
+   }
+
+   closeContentLoginPassword() {
+      this.contentLoginPassword?.classList.add("hidden");
+   }
+
+   closeContentLogoutPassword() {
+      this.contentLogoutPassword?.classList.add("hidden");
+   }
+}
+
+export class FileEncryptionManager {
+   constructor() {
       this.enigma = new Enigma();
+   }
+
+   async saveEncryptedDataToFile(data, password) {
+      try {
+         const jsonData = JSON.stringify(data);
+         const base64Data = this.enigma.stringToBase64(jsonData);
+         const base64Password = this.enigma.stringToBase64(password);
+         const encryptedDataBase64 = this.enigma.encryptData(base64Data, base64Password);
+         const encryptedDataArray = this.enigma.base64ToArray(encryptedDataBase64);
+
+         const blob = new Blob([encryptedDataArray], { type: "application/octet-stream" });
+         const link = document.createElement("a");
+         link.href = URL.createObjectURL(blob);
+         link.download = "vault.data";
+         link.click();
+
+         URL.revokeObjectURL(link.href);
+      } catch (error) {
+         console.error("Ошибка при сохранении зашифрованных данных:", error);
+      }
+   }
+
+   async loadEncryptedDataFromFile(file, password) {
+      return new Promise((resolve, reject) => {
+         const reader = new FileReader();
+
+         reader.onload = async (event) => {
+            try {
+               const encryptedDataArray = new Uint8Array(event.target.result);
+               const encryptedDataBase64 = this.enigma.arrayToBase64(encryptedDataArray);
+               const base64Password = this.enigma.stringToBase64(password);
+               const decryptedDataBase64 = this.enigma.decryptData(encryptedDataBase64, base64Password);
+               const jsonData = this.enigma.base64ToString(decryptedDataBase64);
+               const data = JSON.stringify(jsonData);
+
+               resolve(data);
+            } catch (error) {
+               console.error("Ошибка расшифровки:", error);
+               reject("Ошибка расшифровки: неверный пароль или поврежденные данные");
+            }
+         };
+
+         reader.onerror = () => reject("Ошибка чтения файла");
+         reader.readAsArrayBuffer(file);
+      });
+   }
+}
+
+export class EventHandlers {
+   constructor(encryptionManager) {
       this.encryptionManager = encryptionManager;
+      this.modalManager = new ModalManager();
+      this.fileEncryptionManager = new FileEncryptionManager();
+
       this.init();
    }
 
@@ -32,23 +135,23 @@ export class Authorization {
 
       modalAuth?.addEventListener("click", (event) => {
          if (event.target.classList.contains("modalContent")) {
-            this.closeModal();
+            this.modalManager.closeModal();
          }
       });
 
       popupButtonLogin?.addEventListener("click", () => {
-         this.openModal();
-         this.openModalContentLogin();
+         this.modalManager.openModal();
+         this.modalManager.openModalContentLogin();
       });
 
       popupButtonLogout?.addEventListener("click", () => {
-         this.openModal();
-         this.openModalContentLogout();
+         this.modalManager.openModal();
+         this.modalManager.openModalContentLogout();
       });
 
       closeModalButton.forEach((item) => {
          item.addEventListener("click", () => {
-            this.closeModal();
+            this.modalManager.closeModal();
          });
       });
 
@@ -90,20 +193,28 @@ export class Authorization {
          }
       });
 
-      confirmImportButton?.addEventListener("change", async (e) => {
+      confirmImportButtonInput?.addEventListener("change", async (e) => {
          const file = e.target.files[0];
          const password = encryptionPasswordInputLogin.value;
-         const res = await this.loadEncryptedDataFromFile(file, password);
-         this.encryptionManager.setData(JSON.stringify({ userKeipair: JSON.parse(res) }));
-         this.closeModal();
+         try {
+            const res = await this.fileEncryptionManager.loadEncryptedDataFromFile(file, password);
+            this.encryptionManager.setData(JSON.stringify({ userKeipair: JSON.parse(res) }));
+            this.modalManager.closeModal();
+         } catch (error) {
+            console.error(error);
+         }
       });
 
       confirmDownloadButton?.addEventListener("click", async () => {
-         const data = await this.encryptionManager.getData();
-         const stringifiedData = JSON.parse(data).userKeipair;
-         await this.saveEncryptedDataToFile(stringifiedData, encryptionPasswordInputLogout.value);
-         this.closeModal();
-         this.encryptionManager.clearVault();
+         try {
+            const data = await this.encryptionManager.getData();
+            const stringifiedData = JSON.parse(data).userKeipair;
+            await this.fileEncryptionManager.saveEncryptedDataToFile(stringifiedData, encryptionPasswordInputLogout.value);
+            this.modalManager.closeModal();
+            this.encryptionManager.clearVault();
+         } catch (error) {
+            console.error(error);
+         }
       });
 
       this.encryptionManager.addEventListener("authChange", (e) => {
@@ -125,123 +236,8 @@ export class Authorization {
       });
    }
 
-   openModal() {
-      const body = document.querySelector("body");
-      const modalAuth = document.querySelector("#modalAuth");
-      modalAuth?.classList.remove("hidden");
-      body?.classList.add("overflow-hidden");
-   }
-
-   closeModal() {
-      const body = document.querySelector("body");
-      const modalAuth = document.querySelector("#modalAuth");
-      modalAuth?.classList.add("hidden");
-      body?.classList.remove("overflow-hidden");
-      this.closeModalContentLogin();
-      this.closeModalContentLogout();
-      this.closeContentLoginPassword();
-      this.closeContentLogoutPassword();
-   }
-
-   openModalContentLogin() {
-      const loginContent = document.querySelector("#contentLogin");
-      loginContent?.classList.remove("hidden");
-   }
-
-   openModalContentLogout() {
-      const logoutContent = document.querySelector("#contentLogout");
-      logoutContent?.classList.remove("hidden");
-   }
-
-   closeModalContentLogin() {
-      const loginContent = document.querySelector("#contentLogin");
-      loginContent?.classList.add("hidden");
-   }
-
-   closeModalContentLogout() {
-      const logoutContent = document.querySelector("#contentLogout");
-      logoutContent?.classList.add("hidden");
-   }
-
-   closeContentLoginPassword() {
-      const contentLoginPassword = document.querySelector("#contentLoginPassword");
-      contentLoginPassword?.classList.add("hidden");
-   }
-
-   closeContentLogoutPassword() {
-      const contentLogoutPassword = document.querySelector("#contentLogoutPassword");
-      contentLogoutPassword?.classList.add("hidden");
-   }
-
    async logoutWithoutKeys() {
       await this.encryptionManager.clearVault();
-      this.closeModal();
-   }
-
-   async saveEncryptedDataToFile(data, password) {
-      try {
-         // Конвертируем объект в строку JSON
-         const jsonData = JSON.stringify(data);
-
-         // Конвертируем строку JSON в Base64
-         const base64Data = this.enigma.stringToBase64(jsonData);
-
-         // Конвертируем пароль в Base64
-         const base64Password = this.enigma.stringToBase64(password);
-
-         // Шифруем данные
-         const encryptedDataBase64 = this.enigma.encryptData(base64Data, base64Password);
-
-         // Преобразуем зашифрованные данные в массив байтов
-         const encryptedDataArray = this.enigma.base64ToArray(encryptedDataBase64);
-
-         // Создаем бинарный файл из зашифрованных данных
-         const blob = new Blob([encryptedDataArray], { type: "application/octet-stream" });
-
-         // Инициируем скачивание файла
-         const link = document.createElement("a");
-         link.href = URL.createObjectURL(blob);
-         link.download = "vault.data";
-         link.click();
-
-         // Очищаем временный URL
-         URL.revokeObjectURL(link.href);
-      } catch (error) {
-         console.error("Ошибка при сохранении зашифрованных данных:", error);
-      }
-   }
-
-   async loadEncryptedDataFromFile(file, password) {
-      return new Promise((resolve, reject) => {
-         const reader = new FileReader();
-
-         reader.onload = async (event) => {
-            try {
-               // Преобразуем ArrayBuffer в строку Base64 с использованием метода из Enigma
-               const encryptedDataArray = new Uint8Array(event.target.result);
-               const encryptedDataBase64 = this.enigma.arrayToBase64(encryptedDataArray);
-
-               // Конвертируем пароль в Base64
-               const base64Password = this.enigma.stringToBase64(password);
-
-               // Расшифровываем данные
-               const decryptedDataBase64 = this.enigma.decryptData(encryptedDataBase64, base64Password);
-
-               // Конвертируем расшифрованные данные из Base64 в строку JSON
-               const jsonData = this.enigma.base64ToString(decryptedDataBase64);
-
-               // Парсим JSON-строку в объект
-               const data = JSON.stringify(jsonData);
-
-               resolve(data);
-            } catch (error) {
-               console.error("Ошибка расшифровки:", error);
-               reject("Ошибка расшифровки: неверный пароль или поврежденные данные");
-            }
-         };
-
-         reader.onerror = () => reject("Ошибка чтения файла");
-         reader.readAsArrayBuffer(file); // Читаем файл как ArrayBuffer
-      });
+      this.modalManager.closeModal();
    }
 }

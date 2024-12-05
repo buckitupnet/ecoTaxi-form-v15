@@ -13,12 +13,12 @@ import { EcoTaxiFormHandler } from "./modules/EcoTaxiFormHandler";
 import { CheckboxFormHandler } from "./modules/CheckboxFormHandler";
 import { TariffSelector } from "./modules/TariffSelector";
 import { FormAutoFiller } from "./modules/FormAutoFill";
-import { Authorization } from "./modules/Authorization";
+import { EventHandlers } from "./modules/Authorization";
 import { Chat } from "./modules/Chat";
 
 const instansEncryptionManager = new EncryptionManager();
 const translator = new Translator();
-new Authorization(instansEncryptionManager);
+new EventHandlers(instansEncryptionManager);
 new EcoTaxiFormHandler(CONFIG.BASE_URL, CONFIG.BOARD, CONFIG.MAIN_KEY, CONFIG.ADMIN_KEY, instansEncryptionManager);
 new DateHandler(["check-1", "check-2", "check-3", "check-4"], translator.i18n.locale);
 new TbilisiMap(CONFIG.GOOGLE_KEY);

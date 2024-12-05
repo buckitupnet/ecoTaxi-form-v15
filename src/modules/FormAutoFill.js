@@ -14,6 +14,13 @@ export class FormAutoFiller {
       const savedData = this.loadLocalData();
       const hasVault = await this.encryptionManager.hasVault();
 
+      this.encryptionManager.addEventListener("authChange", (e) => {
+         const { isAuth } = e.detail;
+
+         if (isAuth) this.updateMessageLink("No name");
+      });
+
+
       if (savedData && !hasVault) {
          await this.handleDataMigration(savedData);
       }

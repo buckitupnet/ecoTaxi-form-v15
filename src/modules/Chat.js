@@ -32,6 +32,14 @@ export class Chat {
    #initEventListeners() {
       this.#setupShowButtonListener();
       this.#setupHideButtonListener();
+
+      this.#encryptionManager.addEventListener("authChange", async (e) => {
+         const { isAuth } = e.detail;
+
+         if (isAuth) {
+            await this.#loadUserKeipair();
+         }
+      });
    }
 
    /**
@@ -45,11 +53,6 @@ export class Chat {
       showBtn?.addEventListener("click", async () => {
          this.#toggleVisibility(form, "hidden");
          this.#toggleVisibility(chat, "block");
-
-         if (await this.#encryptionManager.hasVault()) {
-            await this.#loadUserKeipair();
-            this.#loadMessages();
-         }
       });
    }
 
@@ -84,8 +87,17 @@ export class Chat {
     */
    async #loadUserKeipair() {
       try {
-         const data = JSON.parse(await this.#encryptionManager.getData())?.userKeipair;
-         this.#userKeipair = data;
+         setTimeout(async () => {
+            const data = JSON.parse(await this.#encryptionManager.getData());
+            if (data?.userKeipair) {
+               if (typeof data.userKeipair === "object") {
+                  this.#userKeipair = data.userKeipair;
+               } else {
+                  this.#userKeipair = JSON.parse(data.userKeipair);
+               }
+               await this.#loadMessages();
+            }
+         }, 400);
       } catch (error) {
          console.error("Не удалось загрузить ключи пользователя:", error);
       }

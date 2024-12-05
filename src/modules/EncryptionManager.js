@@ -118,7 +118,8 @@ export class EncryptionManager extends EventTarget {
 
          console.log("Подключено к существующему хранилищу:", vaultID);
       } catch (error) {
-         await this.handleError(error, "Ошибка при подключении к хранилищу");
+         this.isAuth = false; // Используем сеттер
+         console.error(error);
       }
    }
 

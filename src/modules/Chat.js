@@ -130,7 +130,7 @@ export class Chat {
                   <p class="my-4 font-bold">
                      <i>${msg.author.name}</i>
                   </p>
-                  <p class='break-all'>${text}</p>
+                  <p class='break-words'>${text}</p>
                   <span class="text-sm text-[#6c757d]">${date}</span>
                </div>`;
          })

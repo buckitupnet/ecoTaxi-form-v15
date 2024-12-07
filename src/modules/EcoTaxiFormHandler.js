@@ -231,7 +231,7 @@ export class EcoTaxiFormHandler {
          const response = await this.sendMonday(values);
          result = await response.json();
 
-         7. Загрузка файла, если он указан
+         // 7. Загрузка файла, если он указан
          if (data && data.file && data.file.size > 0) {
             try {
                await this.uploadFileMonday(result.data.create_item.id, data.file);

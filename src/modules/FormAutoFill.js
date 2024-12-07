@@ -20,7 +20,6 @@ export class FormAutoFiller {
          if (isAuth) this.updateMessageLink("No name");
       });
 
-
       if (savedData && !hasVault) {
          await this.handleDataMigration(savedData);
       }
@@ -51,7 +50,7 @@ export class FormAutoFiller {
 
          this.updateMessageLink(savedData.data.name);
       } catch (error) {
-         console.error("Ошибка при переносе данных в зашифрованное хранилище:", error);
+         console.error("Error during data migration to encrypted storage:", error);
       } finally {
       }
    }
@@ -81,7 +80,7 @@ export class FormAutoFiller {
          const savedData = localStorage.getItem(this.localStorageKey);
          return savedData ? JSON.parse(savedData) : null;
       } catch (error) {
-         console.error("Ошибка загрузки данных из localStorage:", error);
+         console.error("Error loading data from localStorage:", error);
          return null;
       }
    }

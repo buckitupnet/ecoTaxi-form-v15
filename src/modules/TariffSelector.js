@@ -1,8 +1,8 @@
 export class TariffSelector {
    /**
-    * Создает экземпляр класса TariffSelector.
-    * @param {string} areaSelectId - ID выпадающего списка выбора области.
-    * @param {object} tariffChoicesInstance - Экземпляр Choices.js для управления тарифами.
+    * Creates an instance of the TariffSelector class.
+    * @param {string} areaSelectId - The ID of the area selection dropdown.
+    * @param {object} tariffChoicesInstance - An instance of Choices.js for managing tariffs.
     */
    constructor(areaSelectId, tariffChoicesInstance) {
       this.areaSelect = document.getElementById(areaSelectId);
@@ -11,12 +11,12 @@ export class TariffSelector {
       this.#init();
    }
 
-   /** Инициализирует обработчики событий. */
+   /** Initializes event handlers. */
    #init() {
       this.areaSelect.addEventListener("change", () => this.#updateTariff());
    }
 
-   /** Обновляет выбранный тариф в зависимости от выбранной области. */
+   /** Updates the selected tariff based on the selected area. */
    #updateTariff() {
       const selectedOption = this.areaSelect.options[this.areaSelect.selectedIndex];
       const areaType = selectedOption.getAttribute("data-area");
@@ -30,9 +30,9 @@ export class TariffSelector {
    }
 
    /**
-    * Возвращает значение тарифа в зависимости от типа области.
-    * @param {string} areaType - Тип области (central, remote, suburb).
-    * @returns {string|null} Значение тарифа или null, если тип области неизвестен.
+    * Returns the tariff value based on the area type.
+    * @param {string} areaType - The type of the area (central, remote, suburb).
+    * @returns {string|null} The tariff value or null if the area type is unknown.
     */
    #getTargetValue(areaType) {
       switch (areaType) {
@@ -48,8 +48,8 @@ export class TariffSelector {
    }
 
    /**
-    * Устанавливает выбранный тариф в Choices.js.
-    * @param {string} targetValue - Значение тарифа, которое нужно выбрать.
+    * Sets the selected tariff in Choices.js.
+    * @param {string} targetValue - The tariff value to select.
     */
    #selectTariff(targetValue) {
       const options = this.tariffChoicesInstance._store.choices;

@@ -1,12 +1,12 @@
 import { Enigma } from "./Enigma";
 
 /**
- * Класс EcoTaxi обеспечивает взаимодействие с сервером EcoTaxi и управление пользовательскими данными.
+ * The EcoTaxi class facilitates interaction with the EcoTaxi server and manages user data.
  */
 export class EcoTaxi {
    /**
-    * Создает экземпляр EcoTaxi.
-    * @param {string} baseUrl - Базовый URL сервера EcoTaxi.
+    * Creates an instance of EcoTaxi.
+    * @param {string} baseUrl - The base URL of the EcoTaxi server.
     */
    constructor(baseUrl) {
       this.baseUrl = baseUrl;
@@ -14,12 +14,12 @@ export class EcoTaxi {
    }
 
    /**
-    * Упаковывает пользовательские данные для хранения.
-    * @param {string} name - Имя пользователя.
-    * @param {Object} keypair - Пара ключей пользователя.
-    * @param {Array} rooms - Список комнат (по умолчанию пустой массив).
-    * @param {Object} contacts - Список контактов (по умолчанию пустой объект).
-    * @returns {Array} - Упакованные данные пользователя.
+    * Packs user data for storage.
+    * @param {string} name - The user's name.
+    * @param {Object} keypair - The user's keypair.
+    * @param {Array} rooms - A list of rooms (default is an empty array).
+    * @param {Object} contacts - A list of contacts (default is an empty object).
+    * @returns {Array} - Packed user data.
     */
    packUserStorage(name, keypair, rooms = [], contacts = {}) {
       const combinedKeypair = this.combineKeypair(keypair);
@@ -27,17 +27,17 @@ export class EcoTaxi {
    }
 
    /**
-    * Генерирует новую пару ключей пользователя.
-    * @returns {Object} - Пара ключей пользователя.
+    * Generates a new user keypair.
+    * @returns {Object} - The user's keypair.
     */
    generateUserKeypair() {
       return this.enigma.generateKeypair();
    }
 
    /**
-    * Создает ссылку пользователя на основе его публичного ключа.
-    * @param {Object} keypair - Пара ключей пользователя.
-    * @returns {string} - Полная ссылка на пользователя.
+    * Creates a user link based on the public key.
+    * @param {Object} keypair - The user's keypair.
+    * @returns {string} - The complete user link.
     */
    buildUserLink(keypair) {
       const userLinkPath = `/chat/${this.publicKeyToHex(keypair.publicKey)}`;
@@ -45,10 +45,10 @@ export class EcoTaxi {
    }
 
    /**
-    * Регистрирует пользователя на сервере EcoTaxi.
-    * @param {string} name - Имя пользователя.
-    * @param {Object} keypair - Пара ключей пользователя.
-    * @returns {Promise<Object>} - Ответ от сервера.
+    * Registers a user on the EcoTaxi server.
+    * @param {string} name - The user's name.
+    * @param {Object} keypair - The user's keypair.
+    * @returns {Promise<Object>} - The server's response.
     */
    async registerUser(name, keypair) {
       try {
@@ -79,11 +79,11 @@ export class EcoTaxi {
    }
 
    /**
-    * Отправляет сообщение другому пользователю.
-    * @param {Object} myKeyPair - Пара ключей отправителя.
-    * @param {string} peerPublicKeyHex - Публичный ключ получателя в hex формате.
-    * @param {string} text - Текст сообщения.
-    * @returns {Promise<Object>} - Ответ от сервера.
+    * Sends a message to another user.
+    * @param {Object} myKeyPair - The sender's keypair.
+    * @param {string} peerPublicKeyHex - The recipient's public key in hex format.
+    * @param {string} text - The message text.
+    * @returns {Promise<Object>} - The server's response.
     */
    async sendMessage(myKeyPair, peerPublicKeyHex, text) {
       const timestamp = Math.floor(Date.now() / 1000);
@@ -115,12 +115,12 @@ export class EcoTaxi {
    }
 
    /**
-    * Получает сообщения из чата с другим пользователем.
-    * @param {Object} myKeyPair - Пара ключей пользователя.
-    * @param {string} peerPublicKeyHex - Публичный ключ собеседника в hex формате.
-    * @param {number} amount - Количество сообщений для получения.
-    * @param {number} beforeIndex - Индекс сообщения, до которого нужно получить сообщения.
-    * @returns {Promise<Array>} - Список сообщений.
+    * Retrieves messages from a chat with another user.
+    * @param {Object} myKeyPair - The user's keypair.
+    * @param {string} peerPublicKeyHex - The interlocutor's public key in hex format.
+    * @param {number} amount - The number of messages to retrieve.
+    * @param {number} beforeIndex - The index of the message to start retrieval from.
+    * @returns {Promise<Array>} - A list of messages.
     */
    async getMessages(myKeyPair, peerPublicKeyHex, amount, beforeIndex) {
       try {
@@ -167,12 +167,12 @@ export class EcoTaxi {
       }
    }
 
-   // Приватные методы и утилиты
+   // Private methods and utilities
 
    /**
-    * Приватный метод для выполнения GraphQL-запроса к серверу EcoTaxi.
-    * @param {Object} graphql - Объект с запросом GraphQL.
-    * @returns {Promise<Object>} - Ответ от сервера.
+    * Private method for making a GraphQL request to the EcoTaxi server.
+    * @param {Object} graphql - The GraphQL query object.
+    * @returns {Promise<Object>} - The server's response.
     */
    async #graphqlRequest(graphql) {
       const myHeaders = new Headers();
@@ -195,9 +195,9 @@ export class EcoTaxi {
    }
 
    /**
-    * Приватный метод для объединения приватного и публичного ключей в один.
-    * @param {Object} keypair - Пара ключей.
-    * @returns {string} - Объединенный ключ в формате base64.
+    * Private method for combining the private and public keys into one.
+    * @param {Object} keypair - The keypair object.
+    * @returns {string} - The combined key in base64 format.
     */
    combineKeypair(keypair) {
       const privateKeyArray = this.enigma.base64ToArray(keypair.privateKey);
@@ -209,18 +209,18 @@ export class EcoTaxi {
    }
 
    /**
-    * Преобразует публичный ключ из Base64 в Hex формат.
-    * @param {string} publicKeyBase64 - Публичный ключ в формате Base64.
-    * @returns {string} Публичный ключ в формате Hex.
+    * Converts a public key from Base64 to Hex format.
+    * @param {string} publicKeyBase64 - The public key in Base64 format.
+    * @returns {string} - The public key in Hex format.
     */
    publicKeyToHex(publicKeyBase64) {
       return this.enigma.convertPublicKeyToHex(publicKeyBase64);
    }
 
    /**
-    * Преобразует приватный ключ из Base64 в Hex формат.
-    * @param {string} privateKeyBase64 - Приватный ключ в формате Base64.
-    * @returns {string} Приватный ключ в формате Hex.
+    * Converts a private key from Base64 to Hex format.
+    * @param {string} privateKeyBase64 - The private key in Base64 format.
+    * @returns {string} - The private key in Hex format.
     */
    privateKeyToHex(privateKeyBase64) {
       return this.enigma.convertPrivateKeyToHex(privateKeyBase64);

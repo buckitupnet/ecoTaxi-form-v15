@@ -5,9 +5,9 @@ import { Buffer } from "buffer";
 
 export class Enigma {
    /**
-    * Хэширует данные с использованием SHA3-256.
-    * @param {string} base64Data - Данные в формате base64.
-    * @returns {string} - Хэшированные данные в формате base64.
+    * Hashes data using SHA3-256.
+    * @param {string} base64Data - Data in base64 format.
+    * @returns {string} - Hashed data in base64 format.
     */
    hash(base64Data) {
       const shaObj = new jsSHA("SHA3-256", "B64");
@@ -16,10 +16,10 @@ export class Enigma {
    }
 
    /**
-    * Шифрует данные с использованием Blowfish в режиме CFB.
-    * @param {string} base64PlainData - Открытые данные в формате base64.
-    * @param {string} base64Password - Пароль в формате base64.
-    * @returns {string} - Зашифрованные данные в формате base64.
+    * Encrypts data using Blowfish in CFB mode.
+    * @param {string} base64PlainData - Plain data in base64 format.
+    * @param {string} base64Password - Password in base64 format.
+    * @returns {string} - Encrypted data in base64 format.
     */
    encryptData(base64PlainData, base64Password) {
       const { pass, iv } = this.#deriveKeyAndIV(base64Password);
@@ -28,10 +28,10 @@ export class Enigma {
    }
 
    /**
-    * Расшифровывает данные с использованием Blowfish в режиме CFB.
-    * @param {string} base64CipheredData - Зашифрованные данные в формате base64.
-    * @param {string} base64Password - Пароль в формате base64.
-    * @returns {string} - Расшифрованные данные в формате base64.
+    * Decrypts data using Blowfish in CFB mode.
+    * @param {string} base64CipheredData - Encrypted data in base64 format.
+    * @param {string} base64Password - Password in base64 format.
+    * @returns {string} - Decrypted data in base64 format.
     */
    decryptData(base64CipheredData, base64Password) {
       const { pass, iv } = this.#deriveKeyAndIV(base64Password);
@@ -40,8 +40,8 @@ export class Enigma {
    }
 
    /**
-    * Генерирует пару ключей для ECDH.
-    * @returns {Object} - Объект с открытым и закрытым ключами в формате base64.
+    * Generates a keypair for ECDH.
+    * @returns {Object} - Object containing the public and private keys in base64 format.
     */
    generateKeypair() {
       const privateKey = secp.utils.randomPrivateKey();
@@ -54,10 +54,10 @@ export class Enigma {
    }
 
    /**
-    * Вычисляет общий секрет с использованием ECDH.
-    * @param {string} base64PrivateKey - Приватный ключ в формате base64.
-    * @param {string} base64PublicKey - Публичный ключ в формате base64.
-    * @returns {string} - Общий секрет в формате base64.
+    * Computes a shared secret using ECDH.
+    * @param {string} base64PrivateKey - Private key in base64 format.
+    * @param {string} base64PublicKey - Public key in base64 format.
+    * @returns {string} - Shared secret in base64 format.
     */
    computeSharedSecret(base64PrivateKey, base64PublicKey) {
       const privateKeyArray = this.base64ToArray(base64PrivateKey);
@@ -68,11 +68,11 @@ export class Enigma {
    }
 
    /**
-    * Шифрует данные с использованием общего секрета.
-    * @param {string} base64PlainData - Открытые данные в формате base64.
-    * @param {string} base64PrivateKey - Приватный ключ в формате base64.
-    * @param {string} base64PublicKey - Публичный ключ в формате base64.
-    * @returns {string} - Зашифрованные данные в формате base64.
+    * Encrypts data using a shared secret.
+    * @param {string} base64PlainData - Plain data in base64 format.
+    * @param {string} base64PrivateKey - Private key in base64 format.
+    * @param {string} base64PublicKey - Public key in base64 format.
+    * @returns {string} - Encrypted data in base64 format.
     */
    encryptWithSharedSecret(base64PlainData, base64PrivateKey, base64PublicKey) {
       const sharedSecret = this.computeSharedSecret(base64PrivateKey, base64PublicKey);
@@ -80,9 +80,9 @@ export class Enigma {
    }
 
    /**
-    * Создает короткий код из полного ключа.
-    * @param {string} base64FullKey - Полный ключ в формате base64.
-    * @returns {string} - Короткий код в шестнадцатеричном формате.
+    * Creates a shortcode from a full key.
+    * @param {string} base64FullKey - Full key in base64 format.
+    * @returns {string} - Shortcode in hexadecimal format.
     */
    shortcodeFromFullKey(base64FullKey) {
       const buffer = Buffer.from(base64FullKey, "base64");
@@ -94,55 +94,55 @@ export class Enigma {
       return code.toString("hex");
    }
 
-   // Приватные методы и свойства
+   // Private methods and properties
 
    /**
-    * Генерирует ключ и вектор инициализации из пароля.
-    * @param {string} base64Password - Пароль в формате base64.
-    * @returns {Object} - Объект с ключом и вектором инициализации.
+    * Derives a key and initialization vector (IV) from a password.
+    * @param {string} base64Password - Password in base64 format.
+    * @returns {Object} - Object containing the key and initialization vector.
     */
    #deriveKeyAndIV(base64Password) {
       const passBuffer = Buffer.from(base64Password, "base64");
-      const pass = passBuffer.slice(8, 24); // 16 байт для ключа
-      const key1 = passBuffer.slice(0, 8); // Первые 8 байт
-      const key2 = passBuffer.slice(24, 32); // Последние 8 байт
+      const pass = passBuffer.slice(8, 24); // 16 bytes for the key
+      const key1 = passBuffer.slice(0, 8); // First 8 bytes
+      const key2 = passBuffer.slice(24, 32); // Last 8 bytes
 
       const iv = Buffer.alloc(8);
       for (let i = 0; i < 8; i++) {
-         iv[i] = key1[i] ^ key2[i]; // Генерация IV с помощью XOR
+         iv[i] = key1[i] ^ key2[i]; // Generate IV using XOR
       }
 
       return { pass, iv };
    }
 
    /**
-    * Реализация шифрования/расшифровки Blowfish в режиме CFB.
-    * @param {Buffer} data - Данные для обработки.
-    * @param {Buffer} key - Ключ для Blowfish.
-    * @param {Buffer} iv - Вектор инициализации.
-    * @param {boolean} decrypt - Флаг, указывающий на расшифровку.
-    * @returns {Buffer} - Обработанные данные.
+    * Implements Blowfish encryption/decryption in CFB mode.
+    * @param {Buffer} data - Data to process.
+    * @param {Buffer} key - Key for Blowfish.
+    * @param {Buffer} iv - Initialization vector.
+    * @param {boolean} decrypt - Flag indicating decryption.
+    * @returns {Buffer} - Processed data.
     */
    #blowfishCFB(data, key, iv, decrypt = false) {
       const context = blf.key(key);
       return blf.cfb(context, iv, data, decrypt);
    }
 
-   // Утилиты для преобразования данных
+   // Utility methods for data conversion
 
    /**
-    * Преобразует строку base64 в строку.
-    * @param {string} base64Data - Данные в формате base64.
-    * @returns {string} - Декодированная строка.
+    * Converts base64 data to a string.
+    * @param {string} base64Data - Data in base64 format.
+    * @returns {string} - Decoded string.
     */
    base64ToString(base64Data) {
       return Buffer.from(base64Data, "base64").toString("utf-8");
    }
 
    /**
-    * Преобразует строку base64 в Uint8Array.
-    * @param {string} base64Data - Данные в формате base64.
-    * @returns {Uint8Array} - Массив байтов.
+    * Converts base64 data to a Uint8Array.
+    * @param {string} base64Data - Data in base64 format.
+    * @returns {Uint8Array} - Byte array.
     */
    base64ToArray(base64Data) {
       const buffer = Buffer.from(base64Data, "base64");
@@ -150,27 +150,27 @@ export class Enigma {
    }
 
    /**
-    * Преобразует Uint8Array в строку base64.
-    * @param {Uint8Array} array - Массив байтов.
-    * @returns {string} - Данные в формате base64.
+    * Converts a Uint8Array to a base64 string.
+    * @param {Uint8Array} array - Byte array.
+    * @returns {string} - Data in base64 format.
     */
    arrayToBase64(array) {
       return Buffer.from(array).toString("base64");
    }
 
    /**
-    * Преобразует строку в строку base64.
-    * @param {string} string - Исходная строка.
-    * @returns {string} - Данные в формате base64.
+    * Converts a string to a base64 string.
+    * @param {string} string - Original string.
+    * @returns {string} - Data in base64 format.
     */
    stringToBase64(string) {
       return Buffer.from(string, "utf-8").toString("base64");
    }
 
    /**
-    * Преобразует публичный ключ из base64 в hex формат.
-    * @param {string} publicKeyBase64 - Публичный ключ в формате base64.
-    * @returns {string} - Публичный ключ в формате hex.
+    * Converts a public key from base64 to hexadecimal format.
+    * @param {string} publicKeyBase64 - Public key in base64 format.
+    * @returns {string} - Public key in hexadecimal format.
     */
    convertPublicKeyToHex(publicKeyBase64) {
       const publicKeyArray = this.base64ToArray(publicKeyBase64);
@@ -178,9 +178,9 @@ export class Enigma {
    }
 
    /**
-    * Преобразует приватный ключ из base64 в hex формат.
-    * @param {string} privateKeyBase64 - Приватный ключ в формате base64.
-    * @returns {string} - Приватный ключ в формате hex.
+    * Converts a private key from base64 to hexadecimal format.
+    * @param {string} privateKeyBase64 - Private key in base64 format.
+    * @returns {string} - Private key in hexadecimal format.
     */
    convertPrivateKeyToHex(privateKeyBase64) {
       const privateKeyArray = this.base64ToArray(privateKeyBase64);

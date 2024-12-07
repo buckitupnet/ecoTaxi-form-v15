@@ -71,7 +71,7 @@ export class FileEncryptionManager {
 
          URL.revokeObjectURL(link.href);
       } catch (error) {
-         console.error("Ошибка при сохранении зашифрованных данных:", error);
+         console.error("Error saving encrypted data:", error);
       }
    }
 
@@ -90,12 +90,12 @@ export class FileEncryptionManager {
 
                resolve(data);
             } catch (error) {
-               console.error("Ошибка расшифровки:", error);
-               reject("Ошибка расшифровки: неверный пароль или поврежденные данные");
+               console.error("Decryption error:", error);
+               reject("Decryption error: incorrect password or corrupted data");
             }
          };
 
-         reader.onerror = () => reject("Ошибка чтения файла");
+         reader.onerror = () => reject("File reading error");
          reader.readAsArrayBuffer(file);
       });
    }

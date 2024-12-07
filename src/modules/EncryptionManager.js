@@ -2,23 +2,23 @@ import { connect, rawStorage, removeAll } from "@lo-fi/local-vault";
 import "@lo-fi/local-vault/adapter/local-storage";
 
 /**
- * Класс для управления шифрованием и хранилищем данных.
- * Реализует паттерн Singleton для обеспечения единственного экземпляра.
- * Добавлена поддержка событий через EventTarget.
+ * Class for managing encryption and data storage.
+ * Implements the Singleton pattern to ensure a single instance.
+ * Added support for events via EventTarget.
  */
 export class EncryptionManager extends EventTarget {
-   // Статическое свойство для хранения единственного экземпляра класса
+   // Static property to store the single instance of the class
    static instance = null;
 
-   // Приватные свойства
-   #vault = null; // Объект хранилища
-   #isAuth = false; // Флаг состояния авторизации
-   #rawStore = rawStorage("local-storage"); // Необработанное хранилище для хранения ID
-   #abortController = new AbortController(); // Контроллер для отмены операций
+   // Private properties
+   #vault = null; // Storage object
+   #isAuth = false; // Authorization state flag
+   #rawStore = rawStorage("local-storage"); // Raw storage for storing the vault ID
+   #abortController = new AbortController(); // Controller for canceling operations
 
    /**
-    * Приватный конструктор для реализации Singleton.
-    * Используйте EncryptionManager.getInstance() для получения экземпляра.
+    * Private constructor to implement Singleton.
+    * Use EncryptionManager.getInstance() to get the instance.
     */
    constructor() {
       super();
@@ -29,8 +29,8 @@ export class EncryptionManager extends EventTarget {
    }
 
    /**
-    * Статический метод для получения единственного экземпляра класса.
-    * @returns {EncryptionManager} - Экземпляр класса EncryptionManager.
+    * Static method to get the single instance of the class.
+    * @returns {EncryptionManager} - Instance of the EncryptionManager class.
     */
    static getInstance() {
       if (!EncryptionManager.instance) {
@@ -40,28 +40,28 @@ export class EncryptionManager extends EventTarget {
    }
 
    /**
-    * Геттер для доступа к состоянию авторизации.
-    * @returns {boolean} - Состояние авторизации (true или false).
+    * Getter for accessing the authorization state.
+    * @returns {boolean} - Authorization state (true or false).
     */
    get isAuth() {
       return this.#isAuth;
    }
 
    /**
-    * Сеттер для изменения состояния авторизации.
-    * Автоматически отправляет событие authChange при изменении значения.
-    * @param {boolean} value - Новое значение состояния авторизации.
+    * Setter for updating the authorization state.
+    * Automatically dispatches an authChange event when the value changes.
+    * @param {boolean} value - New value for the authorization state.
     */
    set isAuth(value) {
       if (this.#isAuth !== value) {
-         // Проверяем, изменилось ли значение
+         // Check if the value has changed
          this.#isAuth = value;
          this.dispatchEvent(new CustomEvent("authChange", { detail: { isAuth: value } }));
       }
    }
 
    /**
-    * Инициализирует хранилище, подключаясь к существующему или создавая новое.
+    * Initializes the storage by connecting to an existing vault or creating a new one.
     */
    async initialize() {
       try {
@@ -72,12 +72,12 @@ export class EncryptionManager extends EventTarget {
             await this.createVault();
          }
       } catch (error) {
-         await this.handleError(error, "Ошибка при инициализации хранилища");
+         await this.handleError(error, "Error during storage initialization");
       }
    }
 
    /**
-    * Создает новое хранилище и сохраняет его ID.
+    * Creates a new vault and saves its ID.
     */
    async createVault() {
       try {
@@ -92,18 +92,18 @@ export class EncryptionManager extends EventTarget {
          });
          await this.saveVaultID(this.#vault.id);
 
-         // Устанавливаем isAuth через сеттер
+         // Set isAuth using the setter
          this.isAuth = true;
 
-         console.log("Создано новое хранилище с ID:", this.#vault.id);
+         console.log("Created a new vault with ID:", this.#vault.id);
       } catch (error) {
-         await this.handleError(error, "Ошибка при создании нового хранилища");
+         await this.handleError(error, "Error creating a new vault");
       }
    }
 
    /**
-    * Подключается к существующему хранилищу по его ID.
-    * @param {string} vaultID - Идентификатор хранилища.
+    * Connects to an existing vault using its ID.
+    * @param {string} vaultID - The vault identifier.
     */
    async connectToVault(vaultID) {
       try {
@@ -113,19 +113,19 @@ export class EncryptionManager extends EventTarget {
             signal: this.#abortController.signal,
          });
 
-         // Устанавливаем isAuth через сеттер
+         // Set isAuth using the setter
          this.isAuth = true;
 
-         console.log("Подключено к существующему хранилищу:", vaultID);
+         console.log("Connected to existing vault:", vaultID);
       } catch (error) {
-         this.isAuth = false; // Используем сеттер
+         this.isAuth = false; // Use the setter
          console.error(error);
       }
    }
 
    /**
-    * Сохраняет данные в хранилище.
-    * @param {any} value - Данные для сохранения.
+    * Saves data to the vault.
+    * @param {any} value - Data to save.
     */
    async setData(value) {
       try {
@@ -134,15 +134,15 @@ export class EncryptionManager extends EventTarget {
          await this.#vault.set(vaultID, value, {
             signal: this.#abortController.signal,
          });
-         console.log(`Сохранены данные: ключ = "${vaultID}", значение = "${value}"`);
+         console.log(`Data saved: key = "${vaultID}", value = "${value}"`);
       } catch (error) {
-         await this.handleError(error, "Ошибка при сохранении данных");
+         await this.handleError(error, "Error saving data");
       }
    }
 
    /**
-    * Получает данные из хранилища.
-    * @returns {Promise<any>} - Полученные данные.
+    * Retrieves data from the vault.
+    * @returns {Promise<any>} - Retrieved data.
     */
    async getData() {
       try {
@@ -151,29 +151,29 @@ export class EncryptionManager extends EventTarget {
          const value = await this.#vault.get(vaultID, {
             signal: this.#abortController.signal,
          });
-         console.log(`Получены данные: ключ = "${vaultID}", значение = "${value || "нет данных"}"`);
+         console.log(`Data retrieved: key = "${vaultID}", value = "${value || "no data"}"`);
          return value;
       } catch (error) {
-         await this.handleError(error, "Ошибка при получении данных");
+         await this.handleError(error, "Error retrieving data");
       }
    }
 
    /**
-    * Проверяет наличие хранилища.
-    * @returns {Promise<boolean>} - true, если хранилище существует, иначе false.
+    * Checks for the existence of a vault.
+    * @returns {Promise<boolean>} - true if the vault exists, otherwise false.
     */
    async hasVault() {
       try {
          const vaultID = await this.getVaultID();
          return !!vaultID;
       } catch (error) {
-         console.error("Ошибка при проверке наличия хранилища:", error);
+         console.error("Error checking vault existence:", error);
          return false;
       }
    }
 
    /**
-    * Очищает хранилище и удаляет его ID.
+    * Clears the vault and removes its ID.
     */
    async clearVault() {
       try {
@@ -181,57 +181,57 @@ export class EncryptionManager extends EventTarget {
          await this.removeVaultID();
          this.#vault = null;
 
-         // Устанавливаем isAuth через сеттер
+         // Set isAuth using the setter
          this.isAuth = false;
 
-         console.log("Хранилище очищено.");
+         console.log("Vault cleared.");
       } catch (error) {
-         console.error("Ошибка при очистке хранилища:", error);
+         console.error("Error clearing the vault:", error);
       }
    }
 
    /**
-    * Получает ID хранилища из необработанного хранилища.
-    * @returns {Promise<string|null>} - ID хранилища или null, если не найден.
+    * Retrieves the vault ID from raw storage.
+    * @returns {Promise<string|null>} - The vault ID or null if not found.
     */
    async getVaultID() {
       return await this.#rawStore.get("vault-id");
    }
 
    /**
-    * Сохраняет ID хранилища в необработанное хранилище.
-    * @param {string} id - ID хранилища.
+    * Saves the vault ID to raw storage.
+    * @param {string} id - The vault ID.
     */
    async saveVaultID(id) {
       await this.#rawStore.set("vault-id", id);
    }
 
    /**
-    * Удаляет ID хранилища из необработанного хранилища.
+    * Removes the vault ID from raw storage.
     */
    async removeVaultID() {
       await this.#rawStore.remove("vault-id");
    }
 
    /**
-    * Проверяет и инициализирует хранилище, если оно не было инициализировано.
+    * Ensures the vault is initialized if it hasn't been already.
     */
    async ensureVault() {
       if (!this.#vault) {
-         console.warn("Хранилище не инициализировано. Инициализируем...");
+         console.warn("Vault not initialized. Initializing...");
          await this.initialize();
       }
    }
 
    /**
-    * Обрабатывает ошибки, возникающие при операциях с хранилищем.
-    * @param {Error} error - Объект ошибки.
-    * @param {string} message - Сообщение для отображения.
+    * Handles errors that occur during storage operations.
+    * @param {Error} error - The error object.
+    * @param {string} message - The message to display.
     */
    async handleError(error, message) {
-      this.isAuth = false; // Используем сеттер
+      this.isAuth = false; // Use the setter
       if (this.isCancelError(error)) {
-         console.warn(`${message}: Операция отменена пользователем. Очищаем хранилище.`);
+         console.warn(`${message}: Operation canceled by user. Clearing the vault.`);
          await this.clearVault();
       } else {
          console.error(`${message}:`, error);
@@ -239,9 +239,9 @@ export class EncryptionManager extends EventTarget {
    }
 
    /**
-    * Проверяет, является ли ошибка результатом отмены операции.
-    * @param {Error} error - Объект ошибки.
-    * @returns {boolean} - true, если операция была отменена, иначе false.
+    * Checks if an error resulted from a canceled operation.
+    * @param {Error} error - The error object.
+    * @returns {boolean} - true if the operation was canceled, otherwise false.
     */
    isCancelError(error) {
       return (
@@ -253,15 +253,15 @@ export class EncryptionManager extends EventTarget {
    }
 
    /**
-    * Отменяет текущую операцию с заданной причиной.
-    * @param {string} [reason="Операция отменена"] - Причина отмены операции.
+    * Cancels the current operation with a specified reason.
+    * @param {string} [reason="Operation canceled"] - The reason for canceling the operation.
     */
-   cancelOperation(reason = "Операция отменена") {
+   cancelOperation(reason = "Operation canceled") {
       if (this.#abortController) {
-         this.isAuth = false; // Используем сеттер
+         this.isAuth = false; // Use the setter
          this.#abortController.abort(reason);
          this.#abortController = new AbortController();
-         console.warn(`Операция отменена: ${reason}`);
+         console.warn(`Operation canceled: ${reason}`);
       }
    }
 }

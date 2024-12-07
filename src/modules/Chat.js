@@ -1,14 +1,14 @@
 import { EcoTaxi } from "./EcoTaxi";
 
 /**
- * Класс для управления чатом в приложении.
+ * Class for managing the chat in the application.
  */
 export class Chat {
    /**
-    * Создает экземпляр класса Chat.
-    * @param {string} baseUrl - Базовый URL для API EcoTaxi.
-    * @param {string} adminkey - Административный ключ для доступа к API.
-    * @param {object} encryptionInstance - Экземпляр шифрования для работы с пользовательскими данными.
+    * Creates an instance of the Chat class.
+    * @param {string} baseUrl - The base URL for the EcoTaxi API.
+    * @param {string} adminkey - The administrative key for API access.
+    * @param {object} encryptionInstance - An encryption instance for working with user data.
     */
    constructor(baseUrl, adminkey, encryptionInstance) {
       this.#adminkey = adminkey;
@@ -19,7 +19,7 @@ export class Chat {
       this.#initEventListeners();
    }
 
-   // Приватные свойства
+   // Private properties
    #adminkey;
    #ecoTaxi;
    #encryptionManager;
@@ -27,7 +27,7 @@ export class Chat {
    #userKeipair;
 
    /**
-    * Инициализирует обработчики событий для кнопок управления чатом.
+    * Initializes event listeners for chat control buttons.
     */
    #initEventListeners() {
       this.#setupShowButtonListener();
@@ -43,7 +43,7 @@ export class Chat {
    }
 
    /**
-    * Устанавливает обработчик события для кнопки показа чата.
+    * Sets up the event listener for the chat show button.
     */
    #setupShowButtonListener() {
       const showBtn = document.querySelector("#orderBtn");
@@ -57,7 +57,7 @@ export class Chat {
    }
 
    /**
-    * Устанавливает обработчик события для кнопки скрытия чата.
+    * Sets up the event listener for the chat hide button.
     */
    #setupHideButtonListener() {
       const lessBtn = document.querySelector("#chatBtn");
@@ -71,9 +71,9 @@ export class Chat {
    }
 
    /**
-    * Переключает классы видимости для элементов.
-    * @param {HTMLElement} element - HTML-элемент для изменения классов.
-    * @param {string} newClass - Новый класс видимости ("block", "grid" или "hidden").
+    * Toggles visibility classes for elements.
+    * @param {HTMLElement} element - The HTML element to modify.
+    * @param {string} newClass - The new visibility class ("block", "grid", or "hidden").
     */
    #toggleVisibility(element, newClass) {
       if (!element) return;
@@ -82,7 +82,7 @@ export class Chat {
    }
 
    /**
-    * Загружает пару ключей пользователя из хранилища.
+    * Loads the user's key pair from storage.
     * @returns {Promise<void>}
     */
    async #loadUserKeipair() {
@@ -99,12 +99,12 @@ export class Chat {
             }
          }, 400);
       } catch (error) {
-         console.error("Не удалось загрузить ключи пользователя:", error);
+         console.error("Failed to load user keys:", error);
       }
    }
 
    /**
-    * Загружает сообщения чата и отображает их.
+    * Loads and displays chat messages.
     * @returns {Promise<void>}
     */
    async #loadMessages() {
@@ -121,14 +121,14 @@ export class Chat {
             this.#lastLoadedIndex = messages[0].index;
          }
       } catch (error) {
-         console.error("Ошибка загрузки сообщений:", error);
+         console.error("Error loading messages:", error);
       }
    }
 
    /**
-    * Форматирует массив сообщений для отображения в HTML.
-    * @param {Array} messages - Массив сообщений.
-    * @returns {string} - HTML-разметка для сообщений.
+    * Formats an array of messages for display in HTML.
+    * @param {Array} messages - Array of messages.
+    * @returns {string} - HTML markup for the messages.
     */
    #formatMessages(messages) {
       return messages
@@ -137,12 +137,12 @@ export class Chat {
             const text = this.#formatText(msg.content.text);
             const date = new Date(msg.timestamp * 1000).toLocaleString();
 
-            // Условие для проверки автора
+            // Check for the author's identity
             const isEcoTaxi = msg.author.name === "EcoTaxi";
 
             const wrapClass = isEcoTaxi ? "ml-auto w-fit text-right" : "w-fit";
 
-            // Выбор класса стилей в зависимости от автора
+            // Select style classes based on the author
             const containerClass = isEcoTaxi
                ? "max-w-72 rounded-xl bg-blue-200 px-3 py-2"
                : "max-w-72 rounded-xl bg-[#98BFA6] px-3 py-2";
@@ -164,9 +164,9 @@ export class Chat {
    }
 
    /**
-    * Форматирует текст сообщения, добавляя HTML-разметку.
-    * @param {string} text - Исходный текст сообщения.
-    * @returns {string} - Отформатированный текст.
+    * Formats the message text by adding HTML markup.
+    * @param {string} text - Original message text.
+    * @returns {string} - Formatted text.
     */
    #formatText(text) {
       return text
@@ -174,12 +174,12 @@ export class Chat {
          .replace(/Location: (https?:\/\/[^\s]+)/g, 'Location: <a class="text-blue-600" href="$1" target="_blank">Link</a>')
          .replace(/\n/g, "<br>")
          .trim()
-         .replace(/^<br>/, ""); // Удаляет начальный <br>
+         .replace(/^<br>/, ""); // Removes the initial <br>
    }
 
    /**
-    * Прокручивает контейнер чата к концу.
-    * @param {HTMLElement} element - Контейнер чата.
+    * Scrolls the chat container to the end.
+    * @param {HTMLElement} element - Chat container.
     */
    #scrollToEnd(element) {
       element.scrollIntoView({ block: "end", behavior: "smooth" });

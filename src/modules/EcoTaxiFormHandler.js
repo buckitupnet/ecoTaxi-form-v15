@@ -228,18 +228,18 @@ export class EcoTaxiFormHandler {
 
          // 5. Отправка данных в Monday.com API
          let result;
-         // const response = await this.sendMonday(values);
-         // result = await response.json();
+         const response = await this.sendMonday(values);
+         result = await response.json();
 
-         // 7. Загрузка файла, если он указан
-         // if (data && data.file && data.file.size > 0) {
-         //    try {
-         //       await this.uploadFileMonday(result.data.create_item.id, data.file);
-         //    } catch (error) {
-         //       console.error("Ошибка при загрузке файла:", error);
-         //       throw new Error("Не удалось загрузить файл.");
-         //    }
-         // }
+         7. Загрузка файла, если он указан
+         if (data && data.file && data.file.size > 0) {
+            try {
+               await this.uploadFileMonday(result.data.create_item.id, data.file);
+            } catch (error) {
+               console.error("Ошибка при загрузке файла:", error);
+               throw new Error("Не удалось загрузить файл.");
+            }
+         }
 
          // 8. Открытие модального окна
          this.openModal();

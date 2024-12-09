@@ -26,6 +26,14 @@ export class EcoTaxiFormHandler {
       const dates = this.collectCheckedDates(formData);
       const data = this.extractFormData(formData);
 
+      const checks = ["check-1", "check-2", "check-3", "check-4"];
+      const allEmpty = checks.every((check) => !data[check]?.trim());
+
+      if (allEmpty) {
+         this.showErrorMessage("Please provide at least one date in the check fields.");
+         return;
+      }
+
       if (data.read !== "on") {
          this.showErrorMessage("Please accept the sorting guidelines.");
          return;

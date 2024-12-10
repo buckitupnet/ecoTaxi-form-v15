@@ -125,7 +125,7 @@ export class EncryptionManager extends EventTarget {
 
    /**
     * Saves data to the vault.
-    * @param {any} value - Data to save.
+    * @param {string} value - Data to save.
     */
    async setData(value) {
       try {

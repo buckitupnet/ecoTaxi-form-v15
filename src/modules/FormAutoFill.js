@@ -2,56 +2,36 @@ import { EcoTaxi } from "./EcoTaxi";
 
 export class FormAutoFiller {
    constructor(baseUrl, choicesInstances, encryptionInstance) {
-      this.form = document.getElementById("form");
-      this.localStorageKey = "ecoTaxiFormData";
-      this.encryptionManager = encryptionInstance;
       this.ecoTaxi = new EcoTaxi(baseUrl);
+      this.encryptionManager = encryptionInstance;
       this.choicesInstances = choicesInstances;
+      this.#localStorageKey = "ecoTaxiFormData";
       this.init();
    }
+
+   #localStorageKey;
 
    async init() {
       const savedData = this.loadLocalData();
       const hasVault = await this.encryptionManager.hasVault();
 
-      this.encryptionManager.addEventListener("authChange", (e) => {
+      this.encryptionManager.addEventListener("authChange", async (e) => {
          const { isAuth } = e.detail;
-
-         if (isAuth) this.updateMessageLink("No name");
+         if (isAuth) {
+            const savedData = await this.encryptionManager.getData();
+            const parsedData = JSON.parse(savedData || "{}");
+            this.updateMessageLink(parsedData.userName || "No name");
+         }
       });
 
-      if (savedData && !hasVault) {
-         await this.handleDataMigration(savedData);
-      }
-
-      if (savedData && hasVault) {
-         await this.handleDataMigration(savedData);
-      }
-
-      if (hasVault) {
-         await this.loadEncryptedData();
-      }
-
-      localStorage.removeItem(this.localStorageKey);
+      hasVault ? await this.loadEncryptedData() : await this.handleDataMigration(savedData);
+      localStorage.removeItem(this.#localStorageKey);
    }
 
    async handleDataMigration(savedData) {
-      try {
-         this.fillForm(savedData.data);
-
-         const combinedData = {
-            userName: savedData.data.name,
-            userKeipair: { privateKey: savedData.privateKey, publicKey: savedData.publicKey },
-            userData: savedData.data,
-         };
-
-         const stringifiedData = JSON.stringify(combinedData);
-         await this.encryptionManager.setData(stringifiedData);
-
-         this.updateMessageLink(savedData.data.name);
-      } catch (error) {
-         console.error("Error during data migration to encrypted storage:", error);
-      } finally {
+      if (savedData?.userData) {
+         this.fillForm(savedData.userData);
+         await this.encryptionManager.setData(JSON.stringify(savedData));
       }
    }
 
@@ -60,29 +40,23 @@ export class FormAutoFiller {
 
       if (encryptedData) {
          const parsedData = JSON.parse(encryptedData);
+
          if (parsedData?.userData) this.fillForm(parsedData.userData);
-         if (parsedData?.userData?.name) this.updateMessageLink(parsedData.userData.name);
+         if (parsedData?.userName) this.updateMessageLink(parsedData.userName);
       }
    }
 
    updateMessageLink(name) {
       const messageLink = document.getElementById("isMessage");
-      if (messageLink) {
-         const messageName = messageLink.querySelector("#name");
-         messageLink.classList.remove("hidden");
-         messageLink.classList.add("flex");
-         messageName.textContent = name;
-      }
+      const messageName = messageLink.querySelector("#name");
+      messageLink.classList.remove("hidden");
+      messageLink.classList.add("flex");
+      messageName.textContent = name;
    }
 
    loadLocalData() {
-      try {
-         const savedData = localStorage.getItem(this.localStorageKey);
-         return savedData ? JSON.parse(savedData) : null;
-      } catch (error) {
-         console.error("Error loading data from localStorage:", error);
-         return null;
-      }
+      const jsonData = localStorage.getItem(this.#localStorageKey);
+      return jsonData ? JSON.parse(jsonData) : null;
    }
 
    fillForm(data) {
@@ -93,7 +67,8 @@ export class FormAutoFiller {
    }
 
    fillFormField(name, value) {
-      const field = this.form.querySelector(`[name="${name}"]`);
+      const form = document.getElementById("form");
+      const field = form?.querySelector(`[name="${name}"]`);
       if (!field) return;
 
       const choicesInstance = this.choicesInstances?.[name];

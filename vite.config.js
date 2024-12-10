@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import inject from "@rollup/plugin-inject";
-import LV from "@lo-fi/local-vault/bundlers/vite";
 
 export default defineConfig({
    root: "src/",
@@ -23,7 +22,6 @@ export default defineConfig({
    },
 
    plugins: [
-      LV(),
       inject({
          Buffer: ["buffer", "Buffer"],
          process: "process/browser",

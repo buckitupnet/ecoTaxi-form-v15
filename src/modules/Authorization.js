@@ -1,22 +1,20 @@
 import { Enigma } from "./Enigma";
 
-export class ModalManager {
-   constructor() {
-      this.body = document.querySelector("body");
-      this.modalAuth = document.getElementById("modalAuth");
+class ModalManager {
+   static body = document.querySelector("body");
+   static modalAuth = document.getElementById("modalAuth");
 
-      this.contentLogin = document.getElementById("contentLogin");
-      this.contentLogout = document.getElementById("contentLogout");
-      this.contentLoginPassword = document.getElementById("contentLoginPassword");
-      this.contentLogoutPassword = document.getElementById("contentLogoutPassword");
-   }
+   static contentLogin = document.getElementById("contentLogin");
+   static contentLogout = document.getElementById("contentLogout");
+   static contentLoginPassword = document.getElementById("contentLoginPassword");
+   static contentLogoutPassword = document.getElementById("contentLogoutPassword");
 
-   openModal() {
+   static openModal() {
       this.modalAuth?.classList.remove("hidden");
       this.body?.classList.add("overflow-hidden");
    }
 
-   closeModal() {
+   static closeModal() {
       this.modalAuth?.classList.add("hidden");
       this.body?.classList.remove("overflow-hidden");
       this.closeModalContentLogin();
@@ -25,37 +23,35 @@ export class ModalManager {
       this.closeContentLogoutPassword();
    }
 
-   openModalContentLogin() {
+   static openModalContentLogin() {
       this.contentLogin?.classList.remove("hidden");
    }
 
-   openModalContentLogout() {
+   static openModalContentLogout() {
       this.contentLogout?.classList.remove("hidden");
    }
 
-   closeModalContentLogin() {
+   static closeModalContentLogin() {
       this.contentLogin?.classList.add("hidden");
    }
 
-   closeModalContentLogout() {
+   static closeModalContentLogout() {
       this.contentLogout?.classList.add("hidden");
    }
 
-   closeContentLoginPassword() {
+   static closeContentLoginPassword() {
       this.contentLoginPassword?.classList.add("hidden");
    }
 
-   closeContentLogoutPassword() {
+   static closeContentLogoutPassword() {
       this.contentLogoutPassword?.classList.add("hidden");
    }
 }
 
-export class FileEncryptionManager {
-   constructor() {
-      this.enigma = new Enigma();
-   }
+class FileEncryptionManager {
+   static enigma = new Enigma();
 
-   async saveEncryptedDataToFile(data, password) {
+   static async saveEncryptedDataToFile(data, password) {
       try {
          const jsonData = JSON.stringify(data);
          const base64Data = this.enigma.stringToBase64(jsonData);
@@ -75,7 +71,7 @@ export class FileEncryptionManager {
       }
    }
 
-   async loadEncryptedDataFromFile(file, password) {
+   static async loadEncryptedDataFromFile(file, password) {
       return new Promise((resolve, reject) => {
          const reader = new FileReader();
 
@@ -86,7 +82,7 @@ export class FileEncryptionManager {
                const base64Password = this.enigma.stringToBase64(password);
                const decryptedDataBase64 = this.enigma.decryptData(encryptedDataBase64, base64Password);
                const jsonData = this.enigma.base64ToString(decryptedDataBase64);
-               const data = JSON.stringify(jsonData);
+               const data = JSON.parse(jsonData);
 
                resolve(data);
             } catch (error) {
@@ -104,8 +100,6 @@ export class FileEncryptionManager {
 export class EventHandlers {
    constructor(encryptionManager) {
       this.encryptionManager = encryptionManager;
-      this.modalManager = new ModalManager();
-      this.fileEncryptionManager = new FileEncryptionManager();
 
       this.init();
    }
@@ -135,23 +129,23 @@ export class EventHandlers {
 
       modalAuth?.addEventListener("click", (event) => {
          if (event.target.classList.contains("modalContent")) {
-            this.modalManager.closeModal();
+            ModalManager.closeModal();
          }
       });
 
       popupButtonLogin?.addEventListener("click", () => {
-         this.modalManager.openModal();
-         this.modalManager.openModalContentLogin();
+         ModalManager.openModal();
+         ModalManager.openModalContentLogin();
       });
 
       popupButtonLogout?.addEventListener("click", () => {
-         this.modalManager.openModal();
-         this.modalManager.openModalContentLogout();
+         ModalManager.openModal();
+         ModalManager.openModalContentLogout();
       });
 
       closeModalButton.forEach((item) => {
          item.addEventListener("click", () => {
-            this.modalManager.closeModal();
+            ModalManager.closeModal();
          });
       });
 
@@ -197,9 +191,9 @@ export class EventHandlers {
          const file = e.target.files[0];
          const password = encryptionPasswordInputLogin.value;
          try {
-            const res = await this.fileEncryptionManager.loadEncryptedDataFromFile(file, password);
-            this.encryptionManager.setData(JSON.stringify({ userKeipair: JSON.parse(res) }));
-            this.modalManager.closeModal();
+            const res = await FileEncryptionManager.loadEncryptedDataFromFile(file, password);
+            this.encryptionManager.setData(JSON.stringify(res));
+            ModalManager.closeModal();
          } catch (error) {
             console.error(error);
          }
@@ -208,9 +202,13 @@ export class EventHandlers {
       confirmDownloadButton?.addEventListener("click", async () => {
          try {
             const data = await this.encryptionManager.getData();
-            const stringifiedData = JSON.parse(data).userKeipair;
-            await this.fileEncryptionManager.saveEncryptedDataToFile(stringifiedData, encryptionPasswordInputLogout.value);
-            this.modalManager.closeModal();
+            const stringifiedData = JSON.parse(data);
+
+            await FileEncryptionManager.saveEncryptedDataToFile(
+               { userKeipair: stringifiedData.userKeipair },
+               encryptionPasswordInputLogout?.value,
+            );
+            ModalManager.closeModal();
             this.encryptionManager.clearVault();
          } catch (error) {
             console.error(error);
@@ -238,6 +236,6 @@ export class EventHandlers {
 
    async logoutWithoutKeys() {
       await this.encryptionManager.clearVault();
-      this.modalManager.closeModal();
+      ModalManager.closeModal();
    }
 }

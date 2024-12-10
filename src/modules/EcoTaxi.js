@@ -120,7 +120,7 @@ export class EcoTaxi {
     * @param {string} peerPublicKeyHex - The interlocutor's public key in hex format.
     * @param {number} amount - The number of messages to retrieve.
     * @param {number} beforeIndex - The index of the message to start retrieval from.
-    * @returns {Promise<Array>} - A list of messages.
+    * @returns {Promise<Object>} - The server's response.
     */
    async getMessages(myKeyPair, peerPublicKeyHex, amount, beforeIndex) {
       try {

@@ -90,11 +90,7 @@ export class Chat {
          setTimeout(async () => {
             const data = JSON.parse(await this.#encryptionManager.getData());
             if (data?.userKeipair) {
-               if (typeof data.userKeipair === "object") {
-                  this.#userKeipair = data.userKeipair;
-               } else {
-                  this.#userKeipair = JSON.parse(data.userKeipair);
-               }
+               this.#userKeipair = data.userKeipair;
                await this.#loadMessages();
             }
          }, 400);

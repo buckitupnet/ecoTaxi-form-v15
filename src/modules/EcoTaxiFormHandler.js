@@ -11,6 +11,17 @@ class FormManager {
       return dateFields.some((check) => formData[check]?.trim());
    }
 
+   static validateFields(formData) {
+      const requiredFields = ["area", "tariff", "payment", "language"];
+      return requiredFields.every((field) => {
+         const value = formData[field];
+         if (Array.isArray(value)) {
+            return value.length > 0;
+         }
+         return value?.trim();
+      });
+   }
+
    static collectCheckedDates(formData) {
       const dateFields = ["check-1", "check-2", "check-3", "check-4"];
       return dateFields.filter((field) => formData.get(field)).map((field) => formData.get(field));
@@ -73,7 +84,13 @@ export class EcoTaxiFormHandler {
       const data = FormManager.extractFormData(formData);
       const dates = FormManager.collectCheckedDates(formData);
       const isDateValid = FormManager.validateCheckedDates(data);
+      const isSelectValid = FormManager.validateFields(data);
       const isCaptchaValid = FormManager.validateRecaptcha();
+
+      if (!isSelectValid) {
+         this.showErrorMessage("Please fill in all required selects.");
+         return;
+      }
 
       if (!isDateValid) {
          this.showErrorMessage("Please provide at least one date in the check fields.");

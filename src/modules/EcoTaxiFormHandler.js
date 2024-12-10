@@ -87,13 +87,13 @@ export class EcoTaxiFormHandler {
       const isSelectValid = FormManager.validateFields(data);
       const isCaptchaValid = FormManager.validateRecaptcha();
 
-      if (!isSelectValid) {
-         this.showErrorMessage("Please fill in all required selects.");
+      if (!isDateValid) {
+         this.showErrorMessage("Please provide at least one date in the check fields.");
          return;
       }
 
-      if (!isDateValid) {
-         this.showErrorMessage("Please provide at least one date in the check fields.");
+      if (!isSelectValid) {
+         this.showErrorMessage("Please fill in all required selects.");
          return;
       }
 

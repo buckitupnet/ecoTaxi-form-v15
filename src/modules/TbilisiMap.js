@@ -1,6 +1,8 @@
 import { Loader } from "@googlemaps/js-api-loader";
 
 export class TbilisiMap {
+   static loader = null;
+
    constructor(apiKey) {
       this.apiKey = apiKey;
       this.mapElementId = "googleMap";
@@ -15,14 +17,18 @@ export class TbilisiMap {
    async initMap() {
       const map = document.getElementById(this.mapElementId);
       if (!map) return false;
-      const loader = new Loader({
-         apiKey: this.apiKey,
-         version: "weekly",
-         libraries: ["places"],
-      });
+
+      // Используем статический Loader
+      if (!TbilisiMap.loader) {
+         TbilisiMap.loader = new Loader({
+            apiKey: this.apiKey,
+            version: "weekly",
+            libraries: ["places"],
+         });
+      }
 
       try {
-         const google = await loader.load();
+         const google = await TbilisiMap.loader.load();
          const maps = google.maps;
 
          this.tbilisiBounds = new maps.LatLngBounds(new maps.LatLng(41.628044, 44.659336), new maps.LatLng(41.804767, 44.899529));

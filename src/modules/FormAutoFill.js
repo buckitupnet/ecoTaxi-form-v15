@@ -29,9 +29,10 @@ export class FormAutoFiller {
    }
 
    async handleDataMigration(savedData) {
-      if (savedData?.userData) {
-         this.fillForm(savedData.userData);
-         await this.encryptionManager.setData(JSON.stringify(savedData));
+      if (savedData) {
+         const migratedData = this.migrateToNewStructure(savedData);
+         this.fillForm(migratedData.userData);
+         await this.encryptionManager.setData(JSON.stringify(migratedData));
       }
    }
 
@@ -40,10 +41,28 @@ export class FormAutoFiller {
 
       if (encryptedData) {
          const parsedData = JSON.parse(encryptedData);
+         const migratedData = this.migrateToNewStructure(parsedData);
 
-         if (parsedData?.userData) this.fillForm(parsedData.userData);
-         if (parsedData?.userName) this.updateMessageLink(parsedData.userName);
+         if (migratedData) {
+            await this.encryptionManager.setData(JSON.stringify(migratedData));
+            if (migratedData?.userData) this.fillForm(migratedData.userData);
+            if (migratedData?.userName) this.updateMessageLink(migratedData.userName);
+         }
       }
+   }
+
+   migrateToNewStructure(data) {
+      if (data.data && data.public && data.private) {
+         return {
+            userName: data.name,
+            userKeipair: {
+               privateKey: data.private,
+               publicKey: data.public
+            },
+            userData: data.data
+         };
+      }
+      return data;
    }
 
    updateMessageLink(name) {

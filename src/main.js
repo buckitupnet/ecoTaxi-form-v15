@@ -116,7 +116,7 @@ const options = {
    autoPlaceholder: "aggressive",
    nationalMode: false,
    separateDialCode: true,
-   loadUtilsOnInit: () => import("intl-tel-input/utils"),
+   loadUtils: () => import("intl-tel-input/utils"),
 };
 
 const iti = intlTelInput(input, options);

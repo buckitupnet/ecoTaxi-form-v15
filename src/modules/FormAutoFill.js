@@ -40,13 +40,20 @@ export class FormAutoFiller {
       const encryptedData = await this.encryptionManager.getData();
 
       if (encryptedData) {
-         const parsedData = JSON.parse(encryptedData);
-         const migratedData = this.migrateToNewStructure(parsedData);
+         try {
+            const parsedData = JSON.parse(encryptedData);
+            const migratedData = this.migrateToNewStructure(parsedData);
 
-         if (migratedData) {
-            await this.encryptionManager.setData(JSON.stringify(migratedData));
-            if (migratedData?.userData) this.fillForm(migratedData.userData);
-            if (migratedData?.userName) this.updateMessageLink(migratedData.userName);
+            if (migratedData) {
+               await this.encryptionManager.setData(JSON.stringify(migratedData));
+               if (migratedData?.userData) this.fillForm(migratedData.userData);
+               if (migratedData?.userName) this.updateMessageLink(migratedData.userName);
+            } else {
+               throw new Error("Data does not match expected structure");
+            }
+         } catch (error) {
+            console.error("Invalid data format, clearing vault:", error);
+            await this.encryptionManager.clearVault();
          }
       }
    }
@@ -57,12 +64,16 @@ export class FormAutoFiller {
             userName: data.name,
             userKeipair: {
                privateKey: data.private,
-               publicKey: data.public
+               publicKey: data.public,
             },
-            userData: data.data
+            userData: data.data,
          };
       }
-      return data;
+      if (data.userKeipair) {
+         return data;
+      }
+
+      return null;
    }
 
    updateMessageLink(name) {

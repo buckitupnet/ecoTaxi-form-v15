@@ -162,18 +162,18 @@ export class EcoTaxiFormHandler {
 
          const values = this.prepareRequestPayload(data, dates);
 
-         // let result;
-         // const response = await this.sendMonday(values);
-         // result = await response.json();
+         let result;
+         const response = await this.sendMonday(values);
+         result = await response.json();
 
-         // if (data && data.file && data.file.size > 0) {
-         //    try {
-         //       await this.uploadFileMonday(result.data.create_item.id, data.file);
-         //    } catch (error) {
-         //       console.error("Ошибка при загрузке файла:", error);
-         //       throw new Error("Не удалось загрузить файл.");
-         //    }
-         // }
+         if (data && data.file && data.file.size > 0) {
+            try {
+               await this.uploadFileMonday(result.data.create_item.id, data.file);
+            } catch (error) {
+               console.error("Ошибка при загрузке файла:", error);
+               throw new Error("Не удалось загрузить файл.");
+            }
+         }
 
          this.openModal();
       } catch (error) {

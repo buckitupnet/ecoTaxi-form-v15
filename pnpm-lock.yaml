@@ -27,8 +27,8 @@ importers:
         specifier: ^4.5.0
         version: 4.5.0
       intl-tel-input:
-        specifier: ^24.8.2
-        version: 24.8.2
+        specifier: ^25.2.0
+        version: 25.2.0
     devDependencies:
       '@fullhuman/postcss-purgecss':
         specifier: latest
@@ -687,8 +687,8 @@ packages:
   immutable@4.3.7:
     resolution: {integrity: sha512-1hqclzwYwjRDFLjcFxOM5AYkkG0rpFPpr1RLPMEuGczoS7YA8gLhy8SWXYRAA/XwfEHpfo3cw5JGioS32fnMRw==}
 
-  intl-tel-input@24.8.2:
-    resolution: {integrity: sha512-ZPmkgUopI94c6H0uBEK8L1bQITMWFf5eFD9SuWZ3cV9NkctDwrtsdjMZOuZdI3giOZfVfvIGaZGbq7UrVpPykA==}
+  intl-tel-input@25.2.0:
+    resolution: {integrity: sha512-1eUkLngMyQaeTo37KGCcR6AEro/lO8DIaZRhbmVPmMagyHa4APTnigdTkDEqymF/iOMouDt3JHrhsrIFDpz+5g==}
 
   is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
@@ -1849,7 +1849,7 @@ snapshots:
 
   immutable@4.3.7: {}
 
-  intl-tel-input@24.8.2: {}
+  intl-tel-input@25.2.0: {}
 
   is-binary-path@2.1.0:
     dependencies:

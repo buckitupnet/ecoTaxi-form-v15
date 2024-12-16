@@ -53,15 +53,22 @@ class FileEncryptionManager {
 
    static async saveEncryptedDataToFile(data, password) {
       try {
-         const jsonData = JSON.stringify(data);
+         const { userName, userKeipair } = data;
+         const { privateKey: privateKeyB64, publicKey: publicKeyB64 } = userKeipair;
+         const combinedBase64 = this.enigma.combineKeypair(privateKeyB64, publicKeyB64);
+         const payload = [[userName, combinedBase64], [], {}];
+
+         const jsonData = JSON.stringify(payload);
          const base64Data = this.enigma.stringToBase64(jsonData);
          const base64Password = this.enigma.stringToBase64(password);
-         const encryptedDataBase64 = this.enigma.encryptData(base64Data, base64Password);
+         const hashPassword = this.enigma.hash(base64Password);
+
+         const encryptedDataBase64 = this.enigma.encryptData(base64Data, hashPassword);
          const encryptedDataArray = this.enigma.base64ToArray(encryptedDataBase64);
 
-         const blob = new Blob([encryptedDataArray], { type: "application/octet-stream" });
+         const file = new Blob([encryptedDataArray], { type: "application/octet-stream" });
          const link = document.createElement("a");
-         link.href = URL.createObjectURL(blob);
+         link.href = URL.createObjectURL(file);
          link.download = "vault.data";
          link.click();
 
@@ -80,9 +87,23 @@ class FileEncryptionManager {
                const encryptedDataArray = new Uint8Array(event.target.result);
                const encryptedDataBase64 = this.enigma.arrayToBase64(encryptedDataArray);
                const base64Password = this.enigma.stringToBase64(password);
-               const decryptedDataBase64 = this.enigma.decryptData(encryptedDataBase64, base64Password);
+               const hashPassword = this.enigma.hash(base64Password);
+               const decryptedDataBase64 = this.enigma.decryptData(encryptedDataBase64, hashPassword);
                const jsonData = this.enigma.base64ToString(decryptedDataBase64);
-               const data = JSON.parse(jsonData);
+               const payload = JSON.parse(jsonData);
+
+               const username = payload[0][0];
+               const combinedKeyBase64 = payload[0][1];
+
+               const { privateKey, publicKey } = this.enigma.splitKeypair(combinedKeyBase64);
+
+               const data = {
+                  userName: username,
+                  userKeipair: {
+                     privateKey,
+                     publicKey,
+                  },
+               };
 
                resolve(data);
             } catch (error) {
@@ -203,9 +224,13 @@ export class EventHandlers {
          try {
             const data = await this.encryptionManager.getData();
             const stringifiedData = JSON.parse(data);
+            console.log(data);
 
             await FileEncryptionManager.saveEncryptedDataToFile(
-               { userKeipair: stringifiedData.userKeipair },
+               {
+                  userName: stringifiedData.userName,
+                  userKeipair: stringifiedData.userKeipair,
+               },
                encryptionPasswordInputLogout?.value,
             );
             ModalManager.closeModal();

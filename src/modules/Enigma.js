@@ -86,12 +86,49 @@ export class Enigma {
     */
    shortcodeFromFullKey(base64FullKey) {
       const buffer = Buffer.from(base64FullKey, "base64");
-      const publicKey = buffer.slice(32, 65).toString("base64");
+      const publicKey = Buffer.from(new Uint8Array(buffer.buffer, 32, 33)).toString("base64");
       const publicHash = this.hash(publicKey);
       const hashBuffer = Buffer.from(publicHash, "base64");
-      const code = hashBuffer.slice(0, 3);
+      const code = Buffer.from(new Uint8Array(hashBuffer.buffer, 0, 3));
 
       return code.toString("hex");
+   }
+
+   /**
+    * Combines private and public keys into a single Base64-encoded string.
+    * @param {string} privateKeyB64 - Private key in base64 format.
+    * @param {string} publicKeyB64 - Public key in base64 format.
+    * @returns {string} - Combined key in base64 format.
+    */
+   combineKeypair(privateKeyB64, publicKeyB64) {
+      const combined = new Uint8Array(32 + 33);
+      const privateKeyArray = this.base64ToArray(privateKeyB64);
+      const publicKeyArray = this.base64ToArray(publicKeyB64);
+
+      combined.set(privateKeyArray, 0);
+      combined.set(publicKeyArray, 32);
+
+      return this.arrayToBase64(combined);
+   }
+
+   /**
+    * Splits a combined key (Base64) back into private and public keys.
+    * @param {string} combinedKeyBase64 - Combined key in base64 format.
+    * @returns {Object} - Object containing `privateKey` and `publicKey` in base64 format.
+    */
+   splitKeypair(combinedKeyBase64) {
+      const combinedArray = this.base64ToArray(combinedKeyBase64);
+
+      const privateKeyArray = combinedArray.slice(0, 32);
+      const publicKeyArray = combinedArray.slice(32);
+
+      const privateKeyBase64 = this.arrayToBase64(privateKeyArray);
+      const publicKeyBase64 = this.arrayToBase64(publicKeyArray);
+
+      return {
+         privateKey: privateKeyBase64,
+         publicKey: publicKeyBase64,
+      };
    }
 
    // Private methods and properties

@@ -148,6 +148,8 @@ export class EventHandlers {
       const importKeysButton = document.querySelector("#importKeysButton");
       const closeModalButton = document.querySelectorAll(".closeModalButton");
 
+      const errorPassword = document.querySelector("#errorPassword");
+
       modalAuth?.addEventListener("click", (event) => {
          if (event.target.classList.contains("modalContent")) {
             ModalManager.closeModal();
@@ -216,6 +218,11 @@ export class EventHandlers {
             this.encryptionManager.setData(JSON.stringify(res));
             ModalManager.closeModal();
          } catch (error) {
+            errorPassword.textContent = "Incorrect password";
+            errorPassword?.classList.remove("hidden");
+            setTimeout(() => {
+               errorPassword?.classList.add("hidden");
+            }, 2500);
             console.error(error);
          }
       });

@@ -560,12 +560,14 @@
                         type="password"
                         data-lang="modals.contentLoginPassword.inputPlaceholder" />
                      <p class="mb-2 text-sm text-black/50" data-lang="modals.contentLoginPassword.passwordHint">At least 12 symbols</p>
+                     <p id="errorPassword" class="mb-2 hidden rounded-md bg-red-100 p-2 text-center text-red-500"></p>
                      <label
                         id="confirmImportButton"
                         class="flex h-12 w-full cursor-not-allowed items-center justify-center rounded-lg border-0 bg-blue-600 text-white opacity-50">
                         <input disabled class="hidden" type="file" />
                         <span data-lang="modals.contentLoginPassword.buttons.uploadKeyFile"> Upload Key File</span>
                      </label>
+
                      <button
                         class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
                         data-lang="modals.contentLoginPassword.buttons.close">

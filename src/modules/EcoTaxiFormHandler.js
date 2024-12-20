@@ -154,6 +154,8 @@ export class EcoTaxiFormHandler {
             } else {
                const parsedData = JSON.parse(encryptedData);
                this.#userKeipair = parsedData.userKeipair;
+               await this.ecoTaxi.registerUser(data.name, this.#userKeipair);
+               data.chat = this.ecoTaxi.buildUserLink(this.#userKeipair);
                await this.ecoTaxi.sendMessage(this.#userKeipair, this.adminkey, this.generateText(data, dates));
                const updatedData = JSON.stringify({ userData: data, userKeipair: this.#userKeipair, userName: data.name });
                await this.encryptionManager.setData(updatedData);

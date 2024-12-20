@@ -34,11 +34,11 @@ importers:
         specifier: latest
         version: 7.0.2(postcss@8.4.49)
       '@lo-fi/local-vault':
-        specifier: ^0.16.1
-        version: 0.16.1
+        specifier: ^0.17.1
+        version: 0.17.1
       '@lo-fi/webauthn-local-client':
-        specifier: ^0.1000.2
-        version: 0.1000.2
+        specifier: ^0.2000.0
+        version: 0.2000.0
       '@noble/secp256k1':
         specifier: ^2.1.0
         version: 2.1.0
@@ -91,8 +91,8 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
 
-  '@byojs/storage@0.11.1':
-    resolution: {integrity: sha512-Ybto5yLLY/pyNeITbTK2I2UgdyDekWDfcY3tCcEJLHyxyEOnYVOqaXRBNww/zlBPIqOaR3rnHkhqc3iHL0zvZw==}
+  '@byojs/storage@0.12.0':
+    resolution: {integrity: sha512-o68HTkQ7D621SHaK6HH8sorlpcUXbKkwQQ1pOrZzEHCf1pKiuWuHzZp/onXrJ0RtAtYSyIVXhj3nQFmhR6C5BA==}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -262,14 +262,14 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lo-fi/local-data-lock@0.14.3':
-    resolution: {integrity: sha512-1lBNuSyVB/tv6gHAWsy4UBrU0E+iydi4qjeNtSo9g6aL5BQfFBewp6lqDFhKacZb0sjdSFosSb9NccXLaykNCw==}
+  '@lo-fi/local-data-lock@0.15.2':
+    resolution: {integrity: sha512-IcXnx0GUTEMy4ArZbY6t6nRLD1K046rfTT2qyUtr5kzaibrOt/iTpYz/iSZA5rjezDlbumzvRl0zSalvIK6bmg==}
 
-  '@lo-fi/local-vault@0.16.1':
-    resolution: {integrity: sha512-57WUpLs/ikyrLLZ/RbQfgkeHfgJS5zcD/vK0YZ3059NMOcY1oHwUnaH4sNdWo+mmMTipMAIos7pkN1VNTphWIA==}
+  '@lo-fi/local-vault@0.17.1':
+    resolution: {integrity: sha512-zA6hA5tf06PaAn0rnyGiJ8UicMgT22e2FoDHmJeYfSvvzfgWoANG3NyHGMJjSRkq6TYzdIyM2OYfnbaCubWNCg==}
 
-  '@lo-fi/webauthn-local-client@0.1000.2':
-    resolution: {integrity: sha512-Kt0yC4UGy4WE00P7KBhakDUIbDNr+YqjnfQm86z6jJafbTvbUBiW/Tl0Lks2bA6u2f9N7IDlwlLnGiKADq/2Eg==}
+  '@lo-fi/webauthn-local-client@0.2000.0':
+    resolution: {integrity: sha512-wLBbIUAMTS/JvxPwZkoRLhGWPlPxVhqSwtsDsyFRLlJRCokZ2rjG/t9y1ecSU1HkiXPfdhb1SE7F57zt1KTNOA==}
     peerDependencies:
       html-webpack-plugin: ~5.6.0
     peerDependenciesMeta:
@@ -1317,7 +1317,7 @@ snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
 
-  '@byojs/storage@0.11.1':
+  '@byojs/storage@0.12.0':
     dependencies:
       idb-keyval: 6.2.1
 
@@ -1423,21 +1423,21 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@lo-fi/local-data-lock@0.14.3':
+  '@lo-fi/local-data-lock@0.15.2':
     dependencies:
-      '@byojs/storage': 0.11.1
-      '@lo-fi/webauthn-local-client': 0.1000.2
+      '@byojs/storage': 0.12.0
+      '@lo-fi/webauthn-local-client': 0.2000.0
     transitivePeerDependencies:
       - html-webpack-plugin
 
-  '@lo-fi/local-vault@0.16.1':
+  '@lo-fi/local-vault@0.17.1':
     dependencies:
-      '@byojs/storage': 0.11.1
-      '@lo-fi/local-data-lock': 0.14.3
+      '@byojs/storage': 0.12.0
+      '@lo-fi/local-data-lock': 0.15.2
     transitivePeerDependencies:
       - html-webpack-plugin
 
-  '@lo-fi/webauthn-local-client@0.1000.2':
+  '@lo-fi/webauthn-local-client@0.2000.0':
     dependencies:
       '@root/asn1': 1.0.2
       cbor-js: 0.1.0

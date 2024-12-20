@@ -18,9 +18,11 @@ export class FormAutoFiller {
       this.encryptionManager.addEventListener("authChange", async (e) => {
          const { isAuth } = e.detail;
          if (isAuth) {
-            const savedData = await this.encryptionManager.getData();
-            const parsedData = JSON.parse(savedData || "{}");
-            this.updateMessageLink(parsedData.userName || "No name");
+            setTimeout(async () => {
+               const savedData = await this.encryptionManager.getData();
+               const parsedData = JSON.parse(savedData || "{}");
+               this.updateMessageLink(parsedData.userName);
+            }, 400);
          }
       });
 

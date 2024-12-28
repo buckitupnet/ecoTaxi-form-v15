@@ -233,6 +233,11 @@ export class EcoTaxiFormHandler {
    }
 
    generateText(data, dates) {
+      const payment = {
+         1: "Cash",
+         2: "Transfer to account",
+         3: "Invoice",
+      };
       return [
          `Date: ${dates.join(", ")}`,
          `Language: ${data.language.join(", ") || ""}`,
@@ -242,6 +247,7 @@ export class EcoTaxiFormHandler {
          `Address: ${data.address || ""}`,
          `Quantity: ${data.quantity || ""}`,
          `Tariff: ${data.tariff || ""}`,
+         `Payment: ${payment[data.payment] || ""}`,
          data["check-5"] ? "Saturday ready" : "",
          `Promo Code: ${data.promoCode || ""}`,
          `Comment: ${data.comment || ""}`,

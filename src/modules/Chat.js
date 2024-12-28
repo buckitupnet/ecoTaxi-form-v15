@@ -166,7 +166,7 @@ export class Chat {
     */
    #formatText(text) {
       return text
-         .replace(/(Date|Language|Email|Phone|Area|Address|Quantity|Tariff|Comment|Location):/g, "\n$1:")
+         .replace(/(Date|Language|Email|Phone|Area|Address|Quantity|Tariff|Payment|Comment|Location|Promo Code):/g, "\n$1:")
          .replace(/Location: (https?:\/\/[^\s]+)/g, 'Location: <a class="text-blue-600" href="$1" target="_blank">Link</a>')
          .replace(/\n/g, "<br>")
          .trim()

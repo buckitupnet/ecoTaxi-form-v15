@@ -33,7 +33,7 @@
    },
    "dependencies": {
       "i18n-js": "^4.5.1",
-      "intl-tel-input": "^25.2.0",
+      "intl-tel-input": "^25.2.1",
       "dayjs": "^1.11.13",
       "@popperjs/core": "^2.11.8",
       "@googlemaps/js-api-loader": "^1.16.8",

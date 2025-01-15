@@ -13,7 +13,7 @@
       "vite": "^5.4.11",
       "@lo-fi/local-vault": "^0.17.1",
       "@lo-fi/webauthn-local-client": "^0.2000.0",
-      "@noble/secp256k1": "^2.1.0",
+      "@noble/secp256k1": "^2.2.3",
       "@noble/curves": "^1.8.0",
       "@rollup/plugin-inject": "^5.0.5",
       "blowfish-js": "^1.0.0",

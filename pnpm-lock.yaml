@@ -39,6 +39,9 @@ importers:
       '@lo-fi/webauthn-local-client':
         specifier: ^0.2000.0
         version: 0.2000.0
+      '@noble/curves':
+        specifier: ^1.8.0
+        version: 1.8.0
       '@noble/secp256k1':
         specifier: ^2.1.0
         version: 2.1.0
@@ -275,6 +278,14 @@ packages:
     peerDependenciesMeta:
       html-webpack-plugin:
         optional: true
+
+  '@noble/curves@1.8.0':
+    resolution: {integrity: sha512-j84kjAbzEnQHaSIhRPUmB3/eVXu2k3dKPl2LOrR8fSOIL+89U+7lV117EWHtq/GHM3ReGHM46iRBdZfpc4HRUQ==}
+    engines: {node: ^14.21.3 || >=16}
+
+  '@noble/hashes@1.7.0':
+    resolution: {integrity: sha512-HXydb0DgzTpDPwbVeDGCG1gIu7X6+AuU6Zl6av/E/KG8LMsvPntvq+w17CHRpKBmN6Ybdrt1eP3k4cj8DJa78w==}
+    engines: {node: ^14.21.3 || >=16}
 
   '@noble/secp256k1@2.1.0':
     resolution: {integrity: sha512-XLEQQNdablO0XZOIniFQimiXsZDNwaYgL96dZwC54Q30imSbAOFf3NKtepc+cXyuZf5Q1HCgbqgZ2UFFuHVcEw==}
@@ -1443,6 +1454,12 @@ snapshots:
       cbor-js: 0.1.0
       libsodium: 0.7.15
       libsodium-wrappers: 0.7.15
+
+  '@noble/curves@1.8.0':
+    dependencies:
+      '@noble/hashes': 1.7.0
+
+  '@noble/hashes@1.7.0': {}
 
   '@noble/secp256k1@2.1.0': {}
 

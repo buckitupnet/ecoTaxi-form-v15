@@ -1,9 +1,51 @@
 import * as secp from "@noble/secp256k1";
+import { secp256k1 } from "@noble/curves/secp256k1";
 import blf from "../libs/blowfish";
 import jsSHA from "jssha/dist/sha3";
 import { Buffer } from "buffer";
 
 export class Enigma {
+   /**
+    * Signs a 32-byte digest (in base64) using an ECDSA secp256k1 private key,
+    * then returns a DER-encoded signature in base64 format.
+    * @param {string} digestB64 - 32-byte digest in base64 (already hashed).
+    * @param {string} privateKeyB64 - 32-byte private key in base64.
+    * @returns {string} DER-encoded signature in base64.
+    */
+   signDigestDER(digestB64, privateKeyB64) {
+      // 1. Decode base64 → Uint8Array
+      const digest = this.base64ToArray(digestB64);
+      const privateKey = this.base64ToArray(privateKeyB64);
+
+      // 2. sign(...) will return a Signature object
+      const signatureObj = secp256k1.sign(digest, privateKey);
+
+      // 3. Convert the Signature object to DER bytes
+      const derBytes = signatureObj.toDERRawBytes();
+
+      // 4. Encoding DER bytes into base64
+      return this.arrayToBase64(derBytes);
+   }
+
+   /**
+    * Verifies a DER-encoded signature (in base64) against a 32-byte digest (base64).
+    * @param {string} signatureB64 - DER signature in base64.
+    * @param {string} digestB64 - 32-byte digest in base64.
+    * @param {string} publicKeyB64 - 33- or 65-byte public key in base64.
+    * @returns {boolean} true if valid, otherwise false.
+    */
+   isValidDerSignature(signatureB64, digestB64, publicKeyB64) {
+      // 1. Decode signature & digest & pubkey from base64
+      const derBytes = this.base64ToArray(signatureB64);
+      const digest = this.base64ToArray(digestB64);
+      const publicKey = this.base64ToArray(publicKeyB64);
+
+      // 2. Call verify(...) with the format: 'der' option
+      // verify(...) is able to convert DER-signature into internal format itself
+      // and perform the verification. lowS=true by default.
+      return secp256k1.verify(derBytes, digest, publicKey, { format: "der" });
+   }
+
    /**
     * Hashes data using SHA3-256.
     * @param {string} base64Data - Data in base64 format.

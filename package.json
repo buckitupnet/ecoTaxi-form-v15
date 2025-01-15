@@ -37,7 +37,7 @@
       "dayjs": "^1.11.13",
       "@popperjs/core": "^2.11.8",
       "@googlemaps/js-api-loader": "^1.16.8",
-      "choices.js": "^11.0.2"
+      "choices.js": "^11.0.3"
    },
    "pnpm": {
       "overrides": {

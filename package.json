@@ -41,7 +41,7 @@
    },
    "pnpm": {
       "overrides": {
-         "consola": "3.2.3"
+         "consola": "3.3.3"
       }
    },
    "packageManager": "pnpm@9.12.3"

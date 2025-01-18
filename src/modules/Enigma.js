@@ -1,49 +1,51 @@
 import * as secp from "@noble/secp256k1";
-import { secp256k1 } from "@noble/curves/secp256k1";
+import sha256 from "crypto-js/sha256";
+import encBase64 from "crypto-js/enc-base64";
 import blf from "../libs/blowfish";
 import jsSHA from "jssha/dist/sha3";
 import { Buffer } from "buffer";
 
 export class Enigma {
    /**
-    * Signs a 32-byte digest (in base64) using an ECDSA secp256k1 private key,
-    * then returns a DER-encoded signature in base64 format.
-    * @param {string} digestB64 - 32-byte digest in base64 (already hashed).
-    * @param {string} privateKeyB64 - 32-byte private key in base64.
-    * @returns {string} DER-encoded signature in base64.
+    * Creates an ECDSA secp256k1 signature for the SHA-256 hash of the input data.
+    *
+    * - The input `dataB64` is expected in base64 format.
+    * - It is hashed internally using SHA-256.
+    * - A compact 64-byte signature (R||S) is produced and returned in base64 format.
+    *
+    * @param {string} dataB64 - Raw data (in base64) to be hashed using SHA-256.
+    * @param {string} privateKeyB64 - 32-byte private key in base64 format.
+    * @returns {Promise<string>} - Compact signature (64 bytes, R||S) in base64 format.
     */
-   signDigestDER(digestB64, privateKeyB64) {
-      // 1. Decode base64 → Uint8Array
-      const digest = this.base64ToArray(digestB64);
-      const privateKey = this.base64ToArray(privateKeyB64);
+   async signDigest(dataB64, privateKeyB64) {
+      const hashedDataB64 = this.base64ToSha256(dataB64);
+      const digest = this.base64ToArray(hashedDataB64);
+      const privKey = this.base64ToArray(privateKeyB64);
+      const signatureObj = await secp.signAsync(digest, privKey, { lowS: true, extraEntropy: false });
+      const compactRaw = signatureObj.toCompactRawBytes();
 
-      // 2. sign(...) will return a Signature object
-      const signatureObj = secp256k1.sign(digest, privateKey);
-
-      // 3. Convert the Signature object to DER bytes
-      const derBytes = signatureObj.toDERRawBytes();
-
-      // 4. Encoding DER bytes into base64
-      return this.arrayToBase64(derBytes);
+      return this.arrayToBase64(compactRaw);
    }
 
    /**
-    * Verifies a DER-encoded signature (in base64) against a 32-byte digest (base64).
-    * @param {string} signatureB64 - DER signature in base64.
-    * @param {string} digestB64 - 32-byte digest in base64.
-    * @param {string} publicKeyB64 - 33- or 65-byte public key in base64.
-    * @returns {boolean} true if valid, otherwise false.
+    * Verifies a 64-byte compact signature (R||S) for the SHA-256 hash of the given input data.
+    *
+    * - The input data is hashed using SHA-256.
+    * - The signature and public key are provided in base64 format.
+    *
+    * @param {string} signatureB64 - Compact signature (64 bytes, base64).
+    * @param {string} dataB64 - Original data in base64, to be hashed internally using SHA-256.
+    * @param {string} publicKeyB64 - Public key in base64 format (33 or 65 bytes).
+    * @returns {boolean} - true if the signature is valid, otherwise false.
     */
-   isValidDerSignature(signatureB64, digestB64, publicKeyB64) {
-      // 1. Decode signature & digest & pubkey from base64
-      const derBytes = this.base64ToArray(signatureB64);
-      const digest = this.base64ToArray(digestB64);
-      const publicKey = this.base64ToArray(publicKeyB64);
+   isValidSignDigest(signatureB64, dataB64, publicKeyB64) {
+      const signatureBytes = this.base64ToArray(signatureB64);
+      const signatureObj = secp.Signature.fromCompact(signatureBytes);
+      const hashedDataB64 = this.base64ToSha256(dataB64);
+      const digest = this.base64ToArray(hashedDataB64);
+      const pubKey = this.base64ToArray(publicKeyB64);
 
-      // 2. Call verify(...) with the format: 'der' option
-      // verify(...) is able to convert DER-signature into internal format itself
-      // and perform the verification. lowS=true by default.
-      return secp256k1.verify(derBytes, digest, publicKey, { format: "der" });
+      return secp.verify(signatureObj, digest, pubKey);
    }
 
    /**
@@ -208,6 +210,19 @@ export class Enigma {
    }
 
    // Utility methods for data conversion
+
+   /**
+    * Hashes data encoded in base64 format using SHA-256
+    * and returns the result in base64 format.
+    *
+    * @param {string} dataB64 - Data in base64 format.
+    * @returns {string} - SHA-256 hash of the data in base64 format (32 bytes).
+    */
+   base64ToSha256(dataB64) {
+      const dataWordArray = encBase64.parse(dataB64);
+      const hashWordArray = sha256(dataWordArray);
+      return hashWordArray.toString(encBase64);
+   }
 
    /**
     * Converts base64 data to a string.

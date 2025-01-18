@@ -1,5 +1,5 @@
 import { connect, rawStorage, removeAll } from "@lo-fi/local-vault";
-import "@lo-fi/local-vault/adapter/idb";
+import "@lo-fi/local-vault/adapter/local-storage";
 
 /**
  * Class for managing encryption and data storage.
@@ -13,7 +13,8 @@ export class EncryptionManager extends EventTarget {
    // Private properties
    #vault = null; // Storage object
    #isAuth = false; // Authorization state flag
-   #rawStore = rawStorage("idb"); // Raw storage for storing the vault ID
+   #rawStore = rawStorage("local-storage"); // Raw storage for storing the vault ID
+   #abortController = new AbortController(); // Controller for canceling operations
 
    /**
     * Private constructor to implement Singleton.
@@ -81,12 +82,13 @@ export class EncryptionManager extends EventTarget {
    async createVault() {
       try {
          this.#vault = await connect({
-            storageType: "idb",
+            storageType: "local-storage",
             addNewVault: true,
             keyOptions: {
-               username: "passkey-user",
-               displayName: "Passkey User",
+               username: "biometric-user",
+               displayName: "Biometric User",
             },
+            signal: this.#abortController.signal,
          });
          await this.saveVaultID(this.#vault.id);
 
@@ -107,7 +109,8 @@ export class EncryptionManager extends EventTarget {
       try {
          this.#vault = await connect({
             vaultID,
-            storageType: "idb",
+            storageType: "local-storage",
+            signal: this.#abortController.signal,
          });
 
          // Set isAuth using the setter
@@ -121,15 +124,16 @@ export class EncryptionManager extends EventTarget {
    }
 
    /**
-    * Saves data to the vault (без передачи AbortSignal в опциях, чтобы избежать DataCloneError).
+    * Saves data to the vault.
     * @param {string} value - Data to save.
     */
    async setData(value) {
       try {
          await this.ensureVault();
          const vaultID = await this.getVaultID();
-         // Сигнал не передаём, чтобы не клонировать AbortSignal в IndexedDB
-         await this.#vault.set(vaultID, value);
+         await this.#vault.set(vaultID, value, {
+            signal: this.#abortController.signal,
+         });
          console.log(`Data saved: key = "${vaultID}", value = "${value}"`);
       } catch (error) {
          await this.handleError(error, "Error saving data");
@@ -137,14 +141,16 @@ export class EncryptionManager extends EventTarget {
    }
 
    /**
-    * Retrieves data from the vault (аналогично — без signal).
+    * Retrieves data from the vault.
     * @returns {Promise<any>} - Retrieved data.
     */
    async getData() {
       try {
          await this.ensureVault();
          const vaultID = await this.getVaultID();
-         const value = await this.#vault.get(vaultID);
+         const value = await this.#vault.get(vaultID, {
+            signal: this.#abortController.signal,
+         });
          console.log(`Data retrieved: key = "${vaultID}", value = "${value || "no data"}"`);
          return value;
       } catch (error) {
@@ -244,5 +250,18 @@ export class EncryptionManager extends EventTarget {
          error.message?.includes("Identity/Passkey registration failed") ||
          error.name === "AbortError"
       );
+   }
+
+   /**
+    * Cancels the current operation with a specified reason.
+    * @param {string} [reason="Operation canceled"] - The reason for canceling the operation.
+    */
+   cancelOperation(reason = "Operation canceled") {
+      if (this.#abortController) {
+         this.isAuth = false; // Use the setter
+         this.#abortController.abort(reason);
+         this.#abortController = new AbortController();
+         console.warn(`Operation canceled: ${reason}`);
+      }
    }
 }

@@ -49,17 +49,6 @@ export class Enigma {
    }
 
    /**
-    * Hashes data using SHA3-256.
-    * @param {string} base64Data - Data in base64 format.
-    * @returns {string} - Hashed data in base64 format.
-    */
-   hash(base64Data) {
-      const shaObj = new jsSHA("SHA3-256", "B64");
-      shaObj.update(base64Data);
-      return shaObj.getHash("B64");
-   }
-
-   /**
     * Encrypts data using Blowfish in CFB mode.
     * @param {string} base64PlainData - Plain data in base64 format.
     * @param {string} base64Password - Password in base64 format.
@@ -131,7 +120,7 @@ export class Enigma {
    shortcodeFromFullKey(base64FullKey) {
       const buffer = Buffer.from(base64FullKey, "base64");
       const publicKey = Buffer.from(new Uint8Array(buffer.buffer, 32, 33)).toString("base64");
-      const publicHash = this.hash(publicKey);
+      const publicHash = this.base64Tohash(publicKey);
       const hashBuffer = Buffer.from(publicHash, "base64");
       const code = Buffer.from(new Uint8Array(hashBuffer.buffer, 0, 3));
 
@@ -210,6 +199,17 @@ export class Enigma {
    }
 
    // Utility methods for data conversion
+
+   /**
+    * Hashes data using SHA3-256.
+    * @param {string} base64Data - Data in base64 format.
+    * @returns {string} - Hashed data in base64 format.
+    */
+   base64Tohash(base64Data) {
+      const shaObj = new jsSHA("SHA3-256", "B64");
+      shaObj.update(base64Data);
+      return shaObj.getHash("B64");
+   }
 
    /**
     * Hashes data encoded in base64 format using SHA-256

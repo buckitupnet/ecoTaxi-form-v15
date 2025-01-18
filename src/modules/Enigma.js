@@ -215,11 +215,11 @@ export class Enigma {
     * Hashes data encoded in base64 format using SHA-256
     * and returns the result in base64 format.
     *
-    * @param {string} dataB64 - Data in base64 format.
+    * @param {string} base64Data - Data in base64 format.
     * @returns {string} - SHA-256 hash of the data in base64 format (32 bytes).
     */
-   base64ToSha256(dataB64) {
-      const dataWordArray = encBase64.parse(dataB64);
+   base64ToSha256(base64Data) {
+      const dataWordArray = encBase64.parse(base64Data);
       const hashWordArray = sha256(dataWordArray);
       return hashWordArray.toString(encBase64);
    }

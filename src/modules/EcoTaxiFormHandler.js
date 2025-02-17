@@ -111,6 +111,8 @@ export class EcoTaxiFormHandler {
    }
 
    async sendFormData(data, dates) {
+      ["check-1", "check-2", "check-3", "check-4", "check-5"].forEach((key) => delete data[key]);
+
       const btn = document.getElementById("sendBtn");
       try {
          btn.disabled = true;

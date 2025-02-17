@@ -103,7 +103,6 @@ export class FormAutoFiller {
    fillForm(data) {
       Object.entries(data).forEach(([key, value]) => {
          this.fillFormField(key, value);
-         this.fillCheckbox(key, value);
       });
    }
 
@@ -146,10 +145,5 @@ export class FormAutoFiller {
             field.value = value;
             break;
       }
-   }
-
-   fillCheckbox(key, value) {
-      const checkbox = document.getElementById(key);
-      if (checkbox?.type === "checkbox") checkbox.checked = Boolean(value);
    }
 }

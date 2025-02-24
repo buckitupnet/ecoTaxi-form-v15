@@ -101,6 +101,7 @@ export class FormAutoFiller {
    }
 
    fillForm(data) {
+      ["check-1", "check-2", "check-3", "check-4", "check-5"].forEach((key) => delete data[key]);
       Object.entries(data).forEach(([key, value]) => {
          this.fillFormField(key, value);
       });

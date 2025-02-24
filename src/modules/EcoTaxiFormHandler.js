@@ -111,8 +111,6 @@ export class EcoTaxiFormHandler {
    }
 
    async sendFormData(data, dates) {
-      ["check-1", "check-2", "check-3", "check-4", "check-5"].forEach((key) => delete data[key]);
-
       const btn = document.getElementById("sendBtn");
       try {
          btn.disabled = true;
@@ -148,24 +146,30 @@ export class EcoTaxiFormHandler {
             const parsedData = JSON.parse(encryptedData);
 
             if (parsedData?.userData) {
+               ["check-1", "check-2", "check-3", "check-4", "check-5"].forEach((key) => {
+                  delete parsedData.userData[key];
+               });
+
                parsedData.userData = { ...parsedData.userData, ...data };
                this.#userKeipair = parsedData.userKeipair;
-               await this.ecoTaxi.sendMessage(this.#userKeipair, this.adminkey, this.generateText(data, dates));
+
+               const freshData = { ...data };
+               await this.ecoTaxi.sendMessage(this.#userKeipair, this.adminkey, this.generateText(freshData, dates));
                const updatedData = JSON.stringify(parsedData);
                await this.encryptionManager.setData(updatedData);
             } else {
-               const parsedData = JSON.parse(encryptedData);
                this.#userKeipair = parsedData.userKeipair;
                await this.ecoTaxi.registerUser(data.name, this.#userKeipair);
                data.chat = this.ecoTaxi.buildUserLink(this.#userKeipair);
-               await this.ecoTaxi.sendMessage(this.#userKeipair, this.adminkey, this.generateText(data, dates));
+               const freshData = { ...data };
+               await this.ecoTaxi.sendMessage(this.#userKeipair, this.adminkey, this.generateText(freshData, dates));
                const updatedData = JSON.stringify({ userData: data, userKeipair: this.#userKeipair, userName: data.name });
                await this.encryptionManager.setData(updatedData);
             }
          }
 
-         const values = this.prepareRequestPayload(data, dates);
-
+         const freshData = { ...data };
+         const values = this.prepareRequestPayload(freshData, dates);
          let result;
          const response = await this.sendMonday(values);
          result = await response.json();

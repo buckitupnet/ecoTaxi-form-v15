@@ -225,4 +225,216 @@ export class EcoTaxi {
    privateKeyToHex(privateKeyBase64) {
       return this.enigma.convertPrivateKeyToHex(privateKeyBase64);
    }
+
+   /**
+    * Get upload key for a file (NEW - per PLAN.md)
+    * @param {Object} myKeypair - User's keypair (base64)
+    * @param {Object} destination - Upload destination
+    * @param {File} file - File to upload
+    * @returns {Promise<string>} - Upload key (base64)
+    */
+   async getUploadKey(myKeypair, destination, file) {
+      const timestamp = Math.floor(Date.now() / 1000);
+      
+      try {
+         const response = await this.#graphqlRequest({
+            query: `
+               mutation GetUploadKey(
+                  $myKeypair: InputKeyPair!
+                  $destination: InputUploadDestination!
+                  $entry: InputUploadEntry!
+                  $timestamp: Int!
+               ) {
+                  uploadKey(
+                     myKeypair: $myKeypair
+                     destination: $destination
+                     entry: $entry
+                     timestamp: $timestamp
+                  )
+               }
+            `,
+            variables: {
+               myKeypair: {
+                  publicKey: this.publicKeyToHex(myKeypair.publicKey),
+                  privateKey: this.privateKeyToHex(myKeypair.privateKey)
+               },
+               destination: destination,
+               entry: {
+                  clientName: file.name,
+                  clientType: file.type,
+                  clientSize: file.size,
+                  clientRelativePath: '/',
+                  clientLastModified: Math.floor(file.lastModified / 1000)
+               },
+               timestamp: timestamp
+            }
+         });
+         console.log('✅ Upload key received');
+         return response?.data?.uploadKey;
+      } catch (error) {
+         console.error('Failed to get upload key:', error);
+         throw error;
+      }
+   }
+
+   /**
+    * Upload file in 10MB chunks (NEW - per PLAN.md)
+    * @param {File} file - File to upload
+    * @param {string} uploadKey - Upload key (base64)
+    * @param {Function} onProgress - Progress callback
+    * @returns {Promise<string>} - Upload key
+    */
+   async uploadFileChunked(file, uploadKey, onProgress) {
+      const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB
+      const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+      const keyHex = Buffer.from(uploadKey, 'base64').toString('hex');
+
+      console.log(`📤 Uploading ${file.name} in ${totalChunks} chunk(s)...`);
+
+      for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+         const start = chunkIndex * CHUNK_SIZE;
+         const end = Math.min(start + CHUNK_SIZE, file.size);
+         const chunk = file.slice(start, end);
+
+         const response = await fetch(`${this.baseUrl}/upload_chunk/${keyHex}`, {
+            method: 'PUT',
+            headers: {
+               'Content-Range': `bytes ${start}-${end - 1}/${file.size}`
+            },
+            body: chunk
+         });
+
+         if (!response.ok) {
+            throw new Error(`Chunk upload failed: ${response.status}`);
+         }
+
+         if (onProgress) {
+            onProgress(((chunkIndex + 1) / totalChunks) * 100);
+         }
+      }
+
+      console.log('✅ File chunks uploaded');
+      return uploadKey;
+   }
+
+   /**
+    * Send file message to chat (NEW - per PLAN.md)
+    * @param {Object} myKeypair - User's keypair (base64)
+    * @param {string} peerPublicKeyHex - Peer's public key (hex)
+    * @param {string} uploadKey - Upload key (base64)
+    * @returns {Promise<Object>} - Message reference {id, index}
+    */
+   async sendFile(myKeypair, peerPublicKeyHex, uploadKey) {
+      const timestamp = Math.floor(Date.now() / 1000);
+
+      try {
+         const response = await this.#graphqlRequest({
+            query: `
+               mutation ChatSendFile(
+                  $keypair: InputKeyPair!
+                  $peer: PublicKey!
+                  $uploadKey: FileKey!
+                  $timestamp: Int!
+               ) {
+                  chatSendFile(
+                     myKeypair: $keypair
+                     peerPublicKey: $peer
+                     uploadKey: $uploadKey
+                     timestamp: $timestamp
+                  ) {
+                     id
+                     index
+                  }
+               }
+            `,
+            variables: {
+               keypair: {
+                  publicKey: this.publicKeyToHex(myKeypair.publicKey),
+                  privateKey: this.privateKeyToHex(myKeypair.privateKey)
+               },
+               peer: peerPublicKeyHex,
+               uploadKey: uploadKey,
+               timestamp: timestamp
+            }
+         });
+         console.log('✅ File message sent');
+         return response?.data?.chatSendFile;
+      } catch (error) {
+         console.error('Failed to send file message:', error);
+         throw error;
+      }
+   }
+
+   /**
+    * Upload multiple files and send messages (NEW - per PLAN.md)
+    * @param {Object} myKeypair - User's keypair (base64)
+    * @param {string} peerPublicKeyHex - Peer's public key (hex)
+    * @param {FileList} files - Files to upload
+    * @param {Function} onProgress - Progress callback (progress, current, total, stage, fileName)
+    * @returns {Promise<Array>} - Array of uploaded file info
+    */
+   async uploadMultipleFiles(myKeypair, peerPublicKeyHex, files, onProgress) {
+      const uploadedFiles = [];
+      const totalFiles = files.length;
+      
+      const destination = {
+         type: 'DIALOG',
+         keypair: {
+            publicKey: peerPublicKeyHex,
+            privateKey: ''
+         }
+      };
+
+      console.log(`📤 Starting upload of ${totalFiles} file(s)...`);
+
+      // Phase 1: Upload all files
+      for (let i = 0; i < totalFiles; i++) {
+         const file = files[i];
+         
+         console.log(`\n📁 File ${i + 1}/${totalFiles}: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
+
+         // Get upload key
+         const uploadKey = await this.getUploadKey(myKeypair, destination, file);
+
+         // Upload file in chunks
+         await this.uploadFileChunked(
+            file,
+            uploadKey,
+            (fileProgress) => {
+               const totalProgress = ((i + fileProgress / 100) / totalFiles) * 100;
+               if (onProgress) {
+                  onProgress(totalProgress, i + 1, totalFiles, 'uploading', file.name);
+               }
+            }
+         );
+
+         uploadedFiles.push({
+            uploadKey: uploadKey,
+            fileName: file.name,
+            fileType: file.type,
+            fileSize: file.size
+         });
+      }
+
+      console.log('\n✅ All files uploaded, sending messages...');
+
+      // Phase 2: Send file messages
+      for (let i = 0; i < uploadedFiles.length; i++) {
+         const fileInfo = uploadedFiles[i];
+         
+         console.log(`📨 Sending message ${i + 1}/${uploadedFiles.length}: ${fileInfo.fileName}`);
+
+         const messageRef = await this.sendFile(
+            myKeypair,
+            peerPublicKeyHex,
+            fileInfo.uploadKey
+         );
+
+         uploadedFiles[i].messageId = messageRef.id;
+         uploadedFiles[i].messageIndex = messageRef.index;
+      }
+
+      console.log('✅ All file messages sent');
+      return uploadedFiles;
+   }
 }

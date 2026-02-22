@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="en">
    <head>
-      <title>Order Eco-Taxi</title>
+      <title>Order Eco-Taxi - V15 Testing</title>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
    </head>
    <body class="body p-3">
       <div id="form" class="mx-auto grid max-w-[800px] rounded-xl bg-white p-5 md:p-10">
+         <!-- Language & Login -->
          <div class="mb-4 flex items-center gap-2">
             <select id="languageSelect" class="appearance-none">
                <option value="en">EN</option>
@@ -16,695 +17,102 @@
                id="popupButtonLogin"
                class="flex items-center gap-1 gap-x-2 rounded-md border border-transparent bg-blue-600 px-3 py-1.5 text-center font-medium text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                type="button">
-               <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" x2="9" y1="12" y2="12" />
-               </svg>
-               <span data-lang="button.login"> Login</span>
+               <span data-lang="button.login">Login</span>
             </button>
             <button
                id="popupButtonLogout"
                class="hidden items-center gap-1 gap-x-2 rounded-md border border-transparent bg-blue-600 px-3 py-1.5 text-center font-medium text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                type="button">
-               <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" x2="9" y1="12" y2="12" />
-               </svg>
-               <span data-lang="button.logout"> Logout</span>
+               <span data-lang="button.logout">Logout</span>
             </button>
          </div>
+
+         <!-- Simplified Form -->
          <form id="form" class="grid">
-            <h1 class="mb-2 text-center text-2xl font-medium text-primary sm:text-3xl" data-lang="title">
-               Eco-taxi by Parki ar minda
+            <h1 class="mb-2 text-center text-2xl font-medium text-primary sm:text-3xl">
+               🚖 Eco-Taxi File Upload Test (V15)
             </h1>
-            <p class="mb-5 text-center" data-lang="subtitle">Please, fill this form if you want to order eco-taxi</p>
-            <div id="isMessage" class="my-5 hidden flex-col items-center justify-between gap-2 sm:flex-row">
-               <p class="max-w-lg text-center sm:text-left">
-                  <span data-lang="welcome">Welcome</span>
-                  <span id="name">name</span>!
-                  <span data-lang="details"> Please check your details</span>
-               </p>
-               <button id="orderBtn" class="font-bold underline" type="button">Orders History</button>
+            <p class="mb-5 text-center text-red-600 font-bold">Testing Mode - Simplified Form</p>
+            
+            <!-- Version Badge -->
+            <div class="mb-5 bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm">
+               <div class="font-bold text-blue-900">Form v15 - Original Stack</div>
+               <div class="text-blue-700">Build: Vite + npm</div>
+               <div class="text-blue-600">Status: Testing uploadKey mutation</div>
             </div>
-            <h2 class="mb-3"><span data-lang="date">Date</span> <small class="text-red-500">*</small></h2>
-            <div class="mb-4 grid gap-2 sm:grid-cols-2">
-               <div class="inline-flex items-center">
-                  <label class="relative flex cursor-pointer items-center" for="check-1">
-                     <input
-                        id="check-1"
-                        class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-border text-[0px] text-transparent transition-all checked:border-blue-600 checked:bg-blue-600"
-                        type="checkbox" />
-                     <span
-                        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-0 peer-checked:opacity-100">
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           class="h-3.5 w-3.5"
-                           viewBox="0 0 20 20"
-                           fill="currentColor"
-                           stroke="currentColor"
-                           stroke-width="1">
-                           <path
-                              fill-rule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clip-rule="evenodd"></path>
-                        </svg>
-                     </span>
-                  </label>
-                  <label class="ml-2 cursor-pointer" for="check-1"></label>
-               </div>
-               <div class="inline-flex items-center">
-                  <label class="relative flex cursor-pointer items-center" for="check-2">
-                     <input
-                        id="check-2"
-                        class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-border text-[0px] text-transparent transition-all checked:border-blue-600 checked:bg-blue-600"
-                        type="checkbox" />
-                     <span
-                        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-0 peer-checked:opacity-100">
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           class="h-3.5 w-3.5"
-                           viewBox="0 0 20 20"
-                           fill="currentColor"
-                           stroke="currentColor"
-                           stroke-width="1">
-                           <path
-                              fill-rule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clip-rule="evenodd"></path>
-                        </svg>
-                     </span>
-                  </label>
-                  <label class="ml-2 cursor-pointer" for="check-2"></label>
-               </div>
-               <div class="inline-flex items-center">
-                  <label class="relative flex cursor-pointer items-center" for="check-3">
-                     <input
-                        id="check-3"
-                        class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-border text-[0px] text-transparent transition-all checked:border-blue-600 checked:bg-blue-600"
-                        type="checkbox" />
-                     <span
-                        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-0 peer-checked:opacity-100">
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           class="h-3.5 w-3.5"
-                           viewBox="0 0 20 20"
-                           fill="currentColor"
-                           stroke="currentColor"
-                           stroke-width="1">
-                           <path
-                              fill-rule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clip-rule="evenodd"></path>
-                        </svg>
-                     </span>
-                  </label>
-                  <label class="ml-2 cursor-pointer" for="check-3"> </label>
-               </div>
-               <div class="inline-flex items-center">
-                  <label class="relative flex cursor-pointer items-center" for="check-4">
-                     <input
-                        id="check-4"
-                        class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-border text-[0px] text-transparent transition-all checked:border-blue-600 checked:bg-blue-600"
-                        type="checkbox" />
-                     <span
-                        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-0 peer-checked:opacity-100">
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           class="h-3.5 w-3.5"
-                           viewBox="0 0 20 20"
-                           fill="currentColor"
-                           stroke="currentColor"
-                           stroke-width="1">
-                           <path
-                              fill-rule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clip-rule="evenodd"></path>
-                        </svg>
-                     </span>
-                  </label>
-                  <label class="ml-2 cursor-pointer" for="check-4"> </label>
-               </div>
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class="" data-lang="name"> Please write your name & surname</span>
-                  <small class="text-red-500">*</small>
+
+            <!-- Hidden fields for validation -->
+            <input type="hidden" name="name" value="Test User V15" />
+            <input type="hidden" name="check-1" value="on" />
+            <input type="hidden" name="email" value="test-v15@eco-taxi.one" />
+            <input type="hidden" name="phone" value="+995555000000" />
+            <input type="hidden" name="address" value="Test Address V15" />
+            <input type="hidden" name="area" value="Vake" />
+            <input type="hidden" name="tariff" value="25 GEL - Basic Tariff Central" />
+            <input type="hidden" name="payment" value="1" />
+            <input type="hidden" name="quantity" value="Test quantity" />
+            <input type="hidden" name="language" value="English" />
+            <input type="hidden" name="read" value="on" />
+            <input type="hidden" name="link" value="" />
+            <input type="hidden" name="chat" value="" />
+            <input type="hidden" name="countryCode" value="GE" />
+
+            <!-- File Upload (Main Feature) -->
+            <div class="mb-6 border-2 border-dashed border-blue-300 rounded-lg p-6 bg-blue-50">
+               <h2 class="mb-3 text-xl font-bold text-blue-900">
+                  📎 Upload Files
                </h2>
                <input
-                  class="ease min-h-10 w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm text-slate-700 transition duration-300 placeholder:text-slate-400 hover:border-border focus:border-blue-600 focus:shadow focus:shadow-blue-300 focus:outline-none"
-                  placeholder="Type here..."
-                  data-lang-placeholder="placeholder"
-                  type="text"
-                  name="name"
-                  required />
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class="" data-lang="email"> Please write your email</span>
-                  <small class="text-red-500">*</small>
-               </h2>
-               <input
-                  class="ease min-h-10 w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm text-slate-700 transition duration-300 placeholder:text-slate-400 hover:border-border focus:border-blue-600 focus:shadow focus:shadow-blue-300 focus:outline-none"
-                  placeholder="Type here..."
-                  data-lang-placeholder="placeholder"
-                  type="email"
-                  name="email"
-                  required />
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class="">
-                     <span data-lang="phone">Please leave your phone number</span>
-                     <small class="text-red-500">*</small>
-                  </span>
-               </h2>
-               <input
-                  id="intlTelInput"
-                  class="ease min-h-10 w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm text-slate-700 transition duration-300 placeholder:text-slate-400 hover:border-border focus:border-blue-600 focus:shadow focus:shadow-blue-300 focus:outline-none"
-                  type="tel"
-                  name="phone"
-                  placeholder="Type here..."
-                  data-lang-placeholder="placeholder"
-                  required />
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class="" data-lang="address"> Please write your address</span>
-                  <small class="text-red-500">*</small>
-               </h2>
-               <input
-                  class="ease min-h-10 w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm text-slate-700 transition duration-300 placeholder:text-slate-400 hover:border-border focus:border-blue-600 focus:shadow focus:shadow-blue-300 focus:outline-none"
-                  placeholder="Type here..."
-                  data-lang-placeholder="placeholder"
-                  type="text"
-                  name="address"
-                  required />
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class="" data-lang="map">Please, tag your address on the map</span>
-               </h2>
-               <div id="googleMap" class="h-[400px] w-full rounded-xl border border-border"></div>
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class=""> <span data-lang="area">Please choose your area</span> <small class="text-red-500">*</small></span>
-               </h2>
-               <select id="areaSelect" class="appearance-none" name="area">
-                  <optgroup label="CENTRAL AREAS 25/50 GEL:">
-                     <option value="Avlabari" data-lang="cities.avlabari" data-area="central">Avlabari</option>
-                     <option value="Bagebi" data-lang="cities.bagebi" data-area="central">Bagebi</option>
-                     <option value="Chughureti" data-lang="cities.chughureti" data-area="central">Chughureti</option>
-                     <option value="Garetubani" data-lang="cities.garetubani" data-area="central">Garetubani</option>
-                     <option value="Elia" data-lang="cities.elia" data-area="central">Elia</option>
-                     <option value="Kharpukhi" data-lang="cities.kharpukhi" data-area="central">Kharpukhi</option>
-                     <option value="Isani" data-lang="cities.isani" data-area="central">Isani</option>
-                     <option value="Mtatsminda" data-lang="cities.mtatsminda" data-area="central">Mtatsminda</option>
-                     <option value="Old Town(Kala)" data-lang="cities.old_town_kala" data-area="central">Old Town(Kala)</option>
-                     <option value="Ortachala" data-lang="cities.ortachala" data-area="central">Ortachala</option>
-                     <option value="Saburtalo" data-lang="cities.saburtalo" data-area="central">Saburtalo</option>
-                     <option value="Sololaki" data-lang="cities.sololaki" data-area="central">Sololaki</option>
-                     <option value="Vera" data-lang="cities.vera" data-area="central">Vera</option>
-                     <option value="Vake" data-lang="cities.vake" data-area="central">Vake</option>
-                  </optgroup>
-                  <optgroup label="REMOTE AREAS 30/50 GEL:">
-                     <option value="Didi Dighomi" data-lang="cities.didi_dighomi" data-area="remote">Didi Dighomi</option>
-                     <option value="Didube" data-lang="cities.didube" data-area="remote">Didube</option>
-                     <option value="Dighomi" data-lang="cities.dighomi" data-area="remote">Dighomi</option>
-                     <option value="Dighomi Village" data-lang="cities.dighomi_village" data-area="remote">Dighomi Village</option>
-                     <option value="Gladani" data-lang="cities.gladani" data-area="remote">Gladani</option>
-                     <option value="Isani" data-lang="cities.isani" data-area="remote">Isani</option>
-                     <option value="Ivertubani" data-lang="cities.ivertubani" data-area="remote">Ivertubani</option>
-                     <option value="Krtsanisi" data-lang="cities.krtsanisi" data-area="remote">Krtsanisi</option>
-                     <option value="Kukia" data-lang="cities.kukia" data-area="remote">Kukia</option>
-                     <option value="Lisi Lake" data-lang="cities.lisi_lake" data-area="remote">Lisi Lake</option>
-                     <option value="Mukhiani" data-lang="cities.mukhiani" data-area="remote">Mukhiani</option>
-                     <option value="Nadzaladevi" data-lang="cities.nadzaladevi" data-area="remote">Nadzaladevi</option>
-                     <option value="Nutsubidze" data-lang="cities.nutsubidze" data-area="remote">Nutsubidze</option>
-                     <option value="Samgori" data-lang="cities.samgori" data-area="remote">Samgori</option>
-                     <option value="Sanzona" data-lang="cities.sanzona" data-area="remote">Sanzona</option>
-                     <option value="Svanetis Ubani" data-lang="cities.svanetis_ubani" data-area="remote">Svanetis Ubani</option>
-                     <option value="Varketili" data-lang="cities.varketili" data-area="remote">Varketili</option>
-                     <option value="Vashlijvari" data-lang="cities.vashlijvari" data-area="remote">Vashlijvari</option>
-                     <option value="Vazisubani" data-lang="cities.vazisubani" data-area="remote">Vazisubani</option>
-                     <option value="Zghvis Ubani" data-lang="cities.zghvis_ubani" data-area="remote">Zghvis Ubani</option>
-                  </optgroup>
-                  <optgroup label="TBILISI SUBURBS 50/60 GEL:">
-                     <option value="Avchala" data-lang="cities.avchala" data-area="suburb">Avchala</option>
-                     <option value="Afrika" data-lang="cities.afrika" data-area="suburb">Afrika</option>
-                     <option value="Orkhevi" data-lang="cities.orkhevi" data-area="suburb">Orkhevi</option>
-                     <option value="Lilo" data-lang="cities.lilo" data-area="suburb">Lilo</option>
-                     <option value="Okrokana" data-lang="cities.okrokana" data-area="suburb">Okrokana</option>
-                     <option value="Kiketi" data-lang="cities.kiketi" data-area="suburb">Kiketi</option>
-                     <option value="Kojori" data-lang="cities.kojori" data-area="suburb">Kojori</option>
-                     <option value="Ponichala" data-lang="cities.ponichala" data-area="suburb">Ponichala</option>
-                     <option value="Shindisi" data-lang="cities.shindisi" data-area="suburb">Shindisi</option>
-                     <option value="Tabakhmela" data-lang="cities.tabakhmela" data-area="suburb">Tabakhmela</option>
-                     <option value="Tkhinvali" data-lang="cities.tkhinvali" data-area="suburb">Tkhinvali</option>
-                     <option value="Tsavkisi" data-lang="cities.tsavkisi" data-area="suburb">Tsavkisi</option>
-                     <option value="Tskneti" data-lang="cities.tskneti" data-area="suburb">Tskneti</option>
-                  </optgroup>
-               </select>
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class="">
-                     <span data-lang="tariff">Please choose your tariff</span>
-                     <small class="text-red-500">*</small>
-                  </span>
-               </h2>
-               <select id="tariffSelect" class="appearance-none" name="tariff" required>
-                  <option value="25 GEL - Basic Tariff Central" data-lang="tariffcs.25">25 GEL - Basic Tariff Central</option>
-                  <option value="30 GEL - Basic Tariff Remote" data-lang="tariffcs.30">30 GEL - Basic Tariff Remote</option>
-                  <option value="35 GEL - Basic Tariff Suburbs" data-lang="tariffcs.35">35 GEL - Basic Tariff Suburbs</option>
-                  <option value="50 GEL - With additional Sorting Central" data-lang="tariffcs.50">
-                     50 GEL - With additional Sorting Central
-                  </option>
-                  <option value="70 GEL - With additional Sorting Suburbse" data-lang="tariffcs.70">
-                     70 GEL - With additional Sorting Suburbs
-                  </option>
-                  <option value="Collective Tariff - More than 5 households" data-lang="tariffcs.сollective">
-                     Collective Tariff - More than 5 households
-                  </option>
-                  <option value="Business Tariff" data-lang="tariffcs.business">Business Tariff</option>
-               </select>
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class="">
-                     <span data-lang="payment">Please choose your payment method</span>
-                     <small class="text-red-500">*</small>
-                  </span>
-               </h2>
-               <select id="paymentSelect" class="appearance-none" name="payment">
-                  <option value="1" data-lang="method.cash">Cash</option>
-                  <option value="2" data-lang="method.transfer">Transfer to account</option>
-                  <option value="3" data-lang="method.invoice">Invoice</option>
-               </select>
-            </div>
-            <div>
-               <h2 class="mb-2">
-                  <span class="">
-                     <span data-lang="lang">Please choose your preferable language</span>
-                     <small class="text-red-500">*</small>
-                  </span>
-               </h2>
-               <select id="langSelect" class="appearance-none" name="language" multiple>
-                  <option value="ქართული">ქართული</option>
-                  <option value="English">English</option>
-                  <option value="Русский">Русский</option>
-               </select>
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2">
-                  <span class="" data-lang="bags">
-                     Please evaluate the amount of your waste (i.e. in Carrefour bags, in craft bags, in 60l bags, in 100l bags, etc.)
-                  </span>
-                  <small class="text-red-500">*</small>
-               </h2>
-               <input
-                  class="ease min-h-10 w-full appearance-none rounded-md border border-border bg-transparent px-3 py-2 text-sm text-slate-700 transition duration-300 placeholder:text-slate-400 hover:border-border focus:border-blue-600 focus:shadow focus:shadow-blue-300 focus:outline-none"
-                  placeholder="Type here..."
-                  data-lang-placeholder="placeholder"
-                  type="text"
-                  name="quantity"
-                  required />
-            </div>
-            <div class="grid sm:grid-cols-2">
-               <img class="block h-auto w-full" src="/img/img-1.jpeg" alt="" loading="lazy" decoding="async" />
-               <img class="block h-auto w-full" src="/img/img-2.jpeg" alt="" loading="lazy" decoding="async" />
-            </div>
-            <div class="mb-4">
-               <h2 class="mb-2" data-lang="file">You can attach a photo of your waste amount here</h2>
-               <label for="small-file-input " class="sr-only" data-lang="choose">Choose file</label>
-               <input
-                  class="block min-h-10 w-full rounded-lg border border-gray-200 text-sm shadow-sm file:me-4 file:min-h-10 file:border-0 file:bg-gray-50 file:px-4 file:py-2 focus:z-10 focus:border-blue-600 focus:ring-blue-600 disabled:pointer-events-none disabled:opacity-50"
+                  id="fileInput"
+                  class="block min-h-12 w-full rounded-lg border-2 border-blue-300 bg-white text-sm shadow-sm file:me-4 file:min-h-12 file:border-0 file:bg-blue-600 file:text-white file:px-6 file:py-3 file:font-semibold hover:file:bg-blue-700 focus:z-10 focus:border-blue-600 focus:ring-2 focus:ring-blue-600"
                   type="file"
-                  name="file" />
+                  name="files"
+                  multiple
+                  accept="image/*" />
+               <p class="mt-3 text-sm text-blue-700">
+                  ✨ Select one or more images to test file upload to eco-taxi.one
+               </p>
+               <div id="filePreview" class="mt-3"></div>
             </div>
-            <div class="mb-4">
-               <h2 class="mb-2" data-lang="restrictions">
-                  If you have any time restrictions or other comments, please write them here
+
+            <!-- Comment (Optional) -->
+            <div class="mb-6">
+               <h2 class="mb-2 text-lg font-semibold">
+                  💬 Comments (Optional)
                </h2>
                <textarea
-                  class="ease w-full resize-none rounded-md border border-border bg-transparent px-3 py-2 text-sm text-slate-700 transition duration-300 placeholder:text-slate-400 hover:border-border focus:border-blue-600 focus:shadow focus:shadow-blue-300 focus:outline-none"
+                  class="ease w-full resize-none rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm text-slate-700 transition duration-300 placeholder:text-slate-400 hover:border-gray-400 focus:border-blue-600 focus:shadow focus:shadow-blue-300 focus:outline-none"
                   rows="4"
                   name="comment"
-                  placeholder="Type here..."
-                  data-lang-placeholder="placeholder"></textarea>
+                  placeholder="Enter any comments or special instructions..."></textarea>
             </div>
-            <div class="mb-4 inline-flex items-center">
-               <label class="relative flex cursor-pointer items-center" for="check-6">
-                  <input
-                     id="check-6"
-                     class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-border transition-all checked:border-blue-600 checked:bg-blue-600"
-                     type="checkbox"
-                     name="read" />
-                  <span
-                     class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-0 peer-checked:opacity-100">
-                     <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-3.5 w-3.5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        stroke="currentColor"
-                        stroke-width="1">
-                        <path
-                           fill-rule="evenodd"
-                           d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                           clip-rule="evenodd"></path>
-                     </svg>
-                  </span>
-               </label>
-               <label class="ml-2 cursor-pointer" for="check-6">
-                  <span data-lang="policy">
-                     I’ve read the
-                     <a class="text-blue-500" href="https://www.eco-taxi.ge/plastic-bottle">sorting guidelines,</a> understand and
-                     accept sorting rules for Eco-taxi.
-                  </span>
-                  <small class="text-red-500">*</small>
-               </label>
-            </div>
-            <div
-               class="g-recaptcha mb-4"
-               id="recaptcha-container"
-               data-size="compact"
-               data-sitekey="6LfBomMpAAAAAISRnbyrtUmdJuQtDd6YtFbjR0Os"
-               data-callback="onSubmit"></div>
+
             <p id="error" class="mb-2 hidden rounded-md bg-red-100 p-2 text-center text-red-500"></p>
+            
+            <!-- Submit Button -->
             <button
                id="sendBtn"
-               class="gap-x-2 rounded-md border border-transparent bg-blue-600 px-3 py-2 text-center font-medium text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-               type="submit"
-               data-lang="btn">
-               Send Order
+               class="gap-x-2 rounded-md border border-transparent bg-blue-600 px-4 py-3 text-center text-lg font-semibold text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+               type="submit">
+               🚀 Test Upload
             </button>
-            <input type="hidden" name="chat" value="" />
-            <input type="hidden" name="link" value="" />
-            <input type="hidden" name="countryCode" value="" />
-            <input type="hidden" name="check-1" value="" />
-            <input type="hidden" name="check-2" value="" />
-            <input type="hidden" name="check-3" value="" />
-            <input type="hidden" name="check-4" value="" />
-            <input type="hidden" name="check-5" value="" />
          </form>
       </div>
-      <div id="chat" class="relative mx-auto hidden max-w-[800px] overflow-hidden rounded-xl bg-white">
-         <header class="absolute left-0 top-0 z-10 flex w-full items-center justify-between border-b border-[#eee] bg-white p-3 px-5">
-            <p id="userName" class="text-lg font-bold"></p>
+
+      <!-- Success Modal -->
+      <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+         <div class="bg-white rounded-lg p-8 max-w-md mx-4">
+            <h2 class="text-2xl font-bold text-green-600 mb-4">✅ Test Complete!</h2>
+            <p class="text-gray-700 mb-6">Files uploaded successfully to eco-taxi.one</p>
             <button
-               id="chatBtn"
-               class="gap-x-2 rounded-md border border-transparent bg-blue-600 px-3 py-2 text-center font-medium text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-               type="button">
-               Show form
+               onclick="document.getElementById('modal').classList.add('hidden')"
+               class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+               Close
             </button>
-         </header>
-         <div id="messageContainer" class="mt-20 grid h-full gap-2 overflow-y-scroll p-3 px-5"></div>
-      </div>
-      <div id="modal" class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-         <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
-         <div class="fixed inset-0 z-10 flex w-screen justify-center overflow-y-auto">
-            <div class="my-auto flex items-center justify-center p-4 text-center sm:items-center sm:p-0">
-               <div
-                  class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
-                  <div class="mb-5 bg-white">
-                     <div class="mx-auto mb-4 flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100">
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           fill="none"
-                           viewBox="0 0 24 24"
-                           stroke-width="1.5"
-                           stroke="currentColor"
-                           aria-hidden="true"
-                           data-slot="icon"
-                           class="size-6 stroke-green-400">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"></path>
-                        </svg>
-                     </div>
-                     <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                        <h3 class="text-center text-lg font-semibold text-gray-900" id="modal-title">Form submit successful</h3>
-                        <div class="mt-2">
-                           <p class="text-center text-gray-500">
-                              Thank you for filling the form! You will receive confirmation of your order to your email shortly.
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <a
-                     class="flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
-                     href="https://www.eco-taxi.ge/">
-                     To home page
-                  </a>
-               </div>
-            </div>
          </div>
       </div>
-      <div id="modalAuth" class="relative z-10 hidden" aria-labelledby="logoutModalTitle" role="dialog" aria-modal="true">
-         <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
-         <div id="modalContent" class="modalContent fixed inset-0 z-10 flex w-screen justify-center overflow-y-auto">
-            <!-- Log In -->
-            <div id="contentLogin" class="my-auto hidden items-center justify-center p-4 text-center sm:items-center sm:p-0">
-               <div
-                  class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
-                  <div class="mb-5 bg-white">
-                     <div class="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3
-                           class="text-center text-lg font-semibold text-gray-900"
-                           id="logoutModalTitle"
-                           data-lang="modals.modalAuth.title">
-                           Log In
-                        </h3>
-                        <div class="mt-2">
-                           <p class="text-center text-gray-500" data-lang="modals.modalAuth.message">
-                              Please, enter your name. That’s how other users will see you
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="grid gap-2">
-                     <button
-                        id="importKeysButton"
-                        class="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-                        <span data-lang="modals.modalAuth.buttons.importKeys"> Import the recovery keys</span>
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           width="16"
-                           height="16"
-                           viewBox="0 0 24 24"
-                           fill="none"
-                           stroke="currentColor"
-                           stroke-width="2"
-                           stroke-linecap="round"
-                           stroke-linejoin="round">
-                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                           <polyline points="17 8 12 3 7 8" />
-                           <line x1="12" x2="12" y1="3" y2="15" />
-                        </svg>
-                     </button>
-                     <button
-                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
-                        data-lang="modals.modalAuth.buttons.close">
-                        Close
-                     </button>
-                  </div>
-               </div>
-            </div>
-            <!-- Import Keys -->
-            <div id="contentLoginPassword" class="my-auto hidden items-center justify-center p-4 text-center sm:items-center sm:p-0">
-               <div
-                  class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
-                  <div class="mb-5 bg-white">
-                     <div class="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3
-                           class="text-center text-lg font-semibold text-gray-900"
-                           id="passwordModalTitle"
-                           data-lang="modals.contentLoginPassword.title">
-                           Import the recovery keys
-                        </h3>
-                        <div class="mt-2">
-                           <p class="text-center text-gray-500" data-lang="modals.contentLoginPassword.message">
-                              Please, upload the key file and enter the password for decryption
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="grid gap-2">
-                     <input
-                        id="encryptionPasswordInputLogin"
-                        class="h-12 w-full rounded-lg border border-black/10 px-3 placeholder-black/50 focus:border-black/50 focus:outline-none focus:ring-0"
-                        placeholder="Enter Password"
-                        minlength="12"
-                        type="password"
-                        data-lang="modals.contentLoginPassword.inputPlaceholder" />
-                     <p class="mb-2 text-sm text-black/50" data-lang="modals.contentLoginPassword.passwordHint">At least 12 symbols</p>
-                     <p id="errorPassword" class="mb-2 hidden rounded-md bg-red-100 p-2 text-center text-red-500"></p>
-                     <label
-                        id="confirmImportButton"
-                        class="flex h-12 w-full cursor-not-allowed items-center justify-center rounded-lg border-0 bg-blue-600 text-white opacity-50">
-                        <input disabled class="hidden" type="file" />
-                        <span data-lang="modals.contentLoginPassword.buttons.uploadKeyFile"> Upload Key File</span>
-                     </label>
-                     <button
-                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
-                        data-lang="modals.contentLoginPassword.buttons.close">
-                        Close
-                     </button>
-                  </div>
-               </div>
-            </div>
-            <!-- Log Out -->
-            <div id="contentLogout" class="my-auto hidden items-center justify-center p-4 text-center sm:items-center sm:p-0">
-               <div
-                  class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
-                  <div class="mb-5 bg-white">
-                     <div class="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3
-                           class="text-center text-lg font-semibold text-gray-900"
-                           id="logoutModalTitle"
-                           data-lang="modals.contentLogout.title">
-                           Log Out & Back Up
-                        </h3>
-                        <div class="mt-2">
-                           <p class="text-center text-gray-500" data-lang="modals.contentLogout.message">
-                              To get access again, you will need the recovery keys:
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="grid gap-2">
-                     <button
-                        id="downloadKeysButton"
-                        class="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-                        <span data-lang="modals.contentLogout.buttons.downloadKeys">Download the Keys</span>
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           width="16"
-                           height="16"
-                           viewBox="0 0 24 24"
-                           fill="none"
-                           stroke="currentColor"
-                           stroke-width="2"
-                           stroke-linecap="round"
-                           stroke-linejoin="round">
-                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                           <polyline points="7 10 12 15 17 10" />
-                           <line x1="12" x2="12" y1="15" y2="3" />
-                        </svg>
-                     </button>
-                     <button
-                        id="logoutWithoutKeysButton"
-                        class="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-blue-600 bg-transparent px-3 py-2 text-sm font-semibold shadow-sm hover:border-blue-500 hover:bg-blue-500 hover:text-white">
-                        <span data-lang="modals.contentLogout.buttons.logoutWithoutKeys">Log Out without the Keys</span>
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           width="16"
-                           height="16"
-                           viewBox="0 0 24 24"
-                           fill="none"
-                           stroke="currentColor"
-                           stroke-width="2"
-                           stroke-linecap="round"
-                           stroke-linejoin="round">
-                           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                           <polyline points="16 17 21 12 16 7" />
-                           <line x1="21" x2="9" y1="12" y2="12" />
-                        </svg>
-                     </button>
-                     <button
-                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
-                        data-lang="modals.contentLogout.buttons.close">
-                        Close
-                     </button>
-                  </div>
-               </div>
-            </div>
-            <!-- Set Up Password -->
-            <div id="contentLogoutPassword" class="my-auto hidden items-center justify-center p-4 text-center sm:items-center sm:p-0">
-               <div
-                  class="relative transform overflow-hidden rounded-lg bg-white p-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
-                  <div class="mb-5 bg-white">
-                     <div class="mt-3 text-center sm:mt-0 sm:text-left">
-                        <h3
-                           class="text-center text-lg font-semibold text-gray-900"
-                           id="passwordModalTitle"
-                           data-lang="modals.contentLogoutPassword.title">
-                           Set Up Password
-                        </h3>
-                        <div class="mt-2">
-                           <p class="text-center text-gray-500" data-lang="modals.contentLogoutPassword.message">
-                              To store the backup copy of the key securely, set up a password
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="grid gap-2">
-                     <input
-                        id="encryptionPasswordInputLogout"
-                        class="h-12 w-full rounded-lg border border-black/10 px-3 placeholder-black/50 focus:border-black/50 focus:outline-none focus:ring-0"
-                        placeholder="Enter Password"
-                        minlength="12"
-                        type="password"
-                        data-lang="modals.contentLogoutPassword.inputPlaceholder" />
-                     <p class="mb-2 text-sm text-black/50" data-lang="modals.contentLogoutPassword.passwordHint">
-                        At least 12 symbols
-                     </p>
-                     <button
-                        id="confirmDownloadButton"
-                        class="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
-                        disabled>
-                        <span data-lang="modals.contentLogoutPassword.buttons.download">Download</span>
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           width="16"
-                           height="16"
-                           viewBox="0 0 24 24"
-                           fill="none"
-                           stroke="currentColor"
-                           stroke-width="2"
-                           stroke-linecap="round"
-                           stroke-linejoin="round">
-                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                           <polyline points="7 10 12 15 17 10" />
-                           <line x1="12" x2="12" y1="15" y2="3" />
-                        </svg>
-                     </button>
-                     <button
-                        class="closeModalButton flex h-11 w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold hover:border-red-500 hover:text-red-500"
-                        data-lang="modals.contentLogoutPassword.buttons.close">
-                        Close
-                     </button>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="fixed bottom-5 right-5">
-         <a class="flex items-center" href="https://wa.me/995595361818" target="_blank">
-            <img class="w-12 rounded-full bg-[#25d366] p-2 lg:w-14" src="/img/whatsapp.png" alt="whatsapp" />
-         </a>
-      </div>
-      <script src="https://www.google.com/recaptcha/api.js"></script>
+
       <script src="/js/walc-external-bundle.js"></script>
-      <script type="module" src="/main.js"></script>
+      <script type="module" src="/main-simple.js"></script>
    </body>
 </html>

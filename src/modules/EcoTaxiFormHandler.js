@@ -2,8 +2,8 @@ import { EcoTaxi } from "./EcoTaxi";
 
 class FormManager {
    static validateRecaptcha() {
-      const recaptchaResponse = grecaptcha.getResponse();
-      return recaptchaResponse.length ? true : false;
+      // ReCAPTCHA disabled for V15 testing
+      return true;
    }
 
    static validateCheckedDates(formData) {
@@ -168,18 +168,27 @@ export class EcoTaxiFormHandler {
             }
          }
 
-         const freshData = { ...data };
-         const values = this.prepareRequestPayload(freshData, dates);
-         let result;
-         const response = await this.sendMonday(values);
-         result = await response.json();
+         // Monday.com integration DISABLED for v15
+         console.log('ℹ️  Monday.com integration disabled');
 
-         if (data && data.file && data.file.size > 0) {
+         // Upload files to eco-taxi.one if any
+         const fileInput = document.querySelector('input[type="file"]');
+         if (fileInput && fileInput.files.length > 0) {
+            console.log(`📤 Uploading ${fileInput.files.length} file(s) to eco-taxi.one...`);
+            
             try {
-               await this.uploadFileMonday(result.data.create_item.id, data.file);
+               await this.ecoTaxi.uploadMultipleFiles(
+                  this.#userKeipair,
+                  this.adminkey,
+                  fileInput.files,
+                  (progress, current, total, stage, fileName) => {
+                     console.log(`Progress: ${progress.toFixed(1)}% - ${stage} ${fileName}`);
+                  }
+               );
+               console.log('✅ All files uploaded to eco-taxi.one');
             } catch (error) {
-               console.error("Ошибка при загрузке файла:", error);
-               throw new Error("Не удалось загрузить файл.");
+               console.error('❌ File upload failed:', error);
+               throw error;
             }
          }
 
@@ -188,7 +197,7 @@ export class EcoTaxiFormHandler {
          console.error("Ошибка при обработке формы:", error);
       } finally {
          btn.disabled = false;
-         grecaptcha.reset();
+         // grecaptcha.reset(); // Disabled for V15 testing
       }
    }
 
